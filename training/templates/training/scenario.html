@@ -1,0 +1,12 @@
+{% extends 'training/base.html' %}
+
+{% block content %}
+  <h2>{{ scenario.email_subject }}</h2>
+  <p>{{ scenario.email_body }}</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button name="action" value="click" class="btn btn-danger">clicked on the link</button>
+    <button name="action" value="report" class="btn btn-success">reported the message</button>
+  </form>
+{% endblock %}

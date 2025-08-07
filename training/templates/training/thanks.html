@@ -1,0 +1,11 @@
+{% extends 'training/base.html' %}
+
+{% block content %}
+  <h3>Thank you!</h3>
+  {% if reported %}
+    <p>Well done! You've reported a phishing message.</p>
+  {% elif clicked %}
+    <p>Unfortunately, you clicked on a phishing link. Be careful!</p>
+  {% endif %}
+  <a href="{% url 'home' %}" class="btn btn-primary">Back to Home Page</a>
+{% endblock %}
