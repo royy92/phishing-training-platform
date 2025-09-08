@@ -16,3 +16,7 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
+
+#Translate
+python manage.py makemessages -l ar
+python manage.py compilemessages
