@@ -6,8 +6,6 @@ Phishing scenario training app featuring multiple scenarios, login/registration 
 # Requermint 
 - Python 3.11+
 - Django 5.x
-- SQLite/PostgreSQL
-- Node (اختياري لدمج Tailwind/Build)
 
 # Run
 ```bash
