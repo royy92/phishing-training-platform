@@ -3,9 +3,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Scenario(models.Model):
-    title = models.CharField(max_length=100)
-    email_subject = models.CharField(max_length=200)
-    email_body = models.TextField()
+    title = models.CharField(max_length=200)
+    title_ar = models.CharField(max_length=200, blank=True, null=True)
+    message = models.TextField()
+    message_ar = models.TextField(blank=True, null=True)
     is_phishing = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

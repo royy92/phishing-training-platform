@@ -1,11 +1,14 @@
 {% extends 'training/base.html' %}
+{% load i18n %}
 
 {% block content %}
-  <h3>Thank you!</h3>
+  <h3>{% trans "Thank you!" %}</h3>
+
   {% if reported %}
-    <p>Well done! You've reported a phishing message.</p>
-  {% elif clicked %}
-    <p>Unfortunately, you clicked on a phishing link. Be careful!</p>
+    <p>{% trans "Well done! You've reported a phishing message." %}</p>
+  {% else %}
+    <p>{% trans "Unfortunately, you clicked on a phishing link. Be careful!" %}</p>
   {% endif %}
-  <a href="{% url 'home' %}" class="btn btn-primary">Back to Home Page</a>
+
+  <a href="{% url 'home' %}" class="btn btn-primary">{% trans "Back to Home Page" %}</a>
 {% endblock %}

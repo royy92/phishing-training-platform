@@ -1,12 +1,32 @@
 {% extends 'training/base.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block content %}
-  <h2>{{ scenario.email_subject }}</h2>
-  <p>{{ scenario.email_body }}</p>
+  <div class="text-center">
+    <h3 class="mb-3">
+      {% if LANGUAGE_CODE == 'ar' and scenario.title_ar %}
+        {{ scenario.title_ar }}
+      {% else %}
+        {{ scenario.title }}
+      {% endif %}
+    </h3>
 
-  <form method="post">
-    {% csrf_token %}
-    <button name="action" value="click" class="btn btn-danger">clicked on the link</button>
-    <button name="action" value="report" class="btn btn-success">reported the message</button>
-  </form>
+    <p class="text-secondary" style="max-width:800px;margin:0 auto;">
+      {% if LANGUAGE_CODE == 'ar' and scenario.message_ar %}
+        {{ scenario.message_ar }}
+      {% else %}
+        {{ scenario.message }}
+      {% endif %}
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 mt-3">
+      <form method="post">{% csrf_token %}
+        <button name="action" value="report" class="btn btn-success">{% trans "reported the message" %}</button>
+      </form>
+      <form method="post" class="ms-2">{% csrf_token %}
+        <button name="action" value="click" class="btn btn-danger">{% trans "clicked on the link" %}</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}

@@ -1,0 +1,93 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: phishing-platform 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-07 22:16+0300\n"
+"PO-Revision-Date: 2025-09-07 12:00+0300\n"
+"Last-Translator: اسمك <بريدك@example.com>\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+# ==== login ====
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+# ==== signup ====
+msgid "Create Account"
+msgstr "إنشاء حساب"
+msgid "Sign up"
+msgstr "تسجيل"
+
+# ==== base/home/common ====
+msgid "Phishing Awareness"
+msgstr "منصة التوعية ضد التصيد"
+msgid "Reports"
+msgstr "التقارير"
+msgid "Hi"
+msgstr "مرحبًا"
+msgid "Logout"
+msgstr "تسجيل الخروج"
+msgid "Available scenarios"
+msgstr "السيناريوهات المتاحة"
+msgid "Open"
+msgstr "فتح"
+msgid "No scenarios yet."
+msgstr "لا توجد سيناريوهات بعد."
+msgid "This is the phishing training center. Fake messages will be displayed here later."
+msgstr "هذا هو مركز التدريب على التصيد. سيتم عرض رسائل وهمية هنا لاحقًا."
+
+# تحية ديناميكية (تأكدي القالب يستخدم blocktrans with username=user.username)
+msgid "Hi %(username)s"
+msgstr "مرحبًا %(username)s"
+
+# ==== scenario ====
+msgid "reported the message"
+msgstr "بلغت عن الرسالة"
+msgid "clicked on the link"
+msgstr "نقرت على الرابط"
+msgid "What will you do?"
+msgstr "ماذا ستفعل؟"
+msgid " Your bank identity verification is required immediately."
+msgstr "يجب عليك التحقق من هويتك المصرفية على الفور."
+msgid " Hello, we inform you that your account has been temporarily suspended due to suspicious activity. Click the following link to confirm your identity: https://bank-login-security-update.com "
+msgstr "مرحباً، نُعلمك بأنه تم تعليق حسابك مؤقتاً بسبب نشاط مشبوه. انقر على الرابط التالي لتأكيد هويتك: https://bank-login-security-update.com"
+
+# ==== thanks ====
+msgid "Thank you!"
+msgstr "شكرًا لك!"
+msgid "Well done! You've reported a phishing message."
+msgstr "أحسنت! لقد أبلغت عن رسالة تصيد."
+msgid "Unfortunately, you clicked on a phishing link. Be careful!"
+msgstr "للأسف، لقد نقرت على رابط تصيد. يرجى الحذر!"
+msgid "Back to Home Page"
+msgstr "العودة إلى الصفحة الرئيسية"
+
+# ==== report ====
+msgid "Your performance"
+msgstr "أداؤك"
+msgid "Total attempts"
+msgstr "إجمالي المحاولات"
+msgid "Wrong clicks"
+msgstr "النقرات الخاطئة"
+msgid "Correct reports"
+msgstr "التبليغات الصحيحة"
+msgid "By scenario"
+msgstr "حسب السيناريو"
+msgid "Scenario"
+msgstr "السيناريو"
+msgid "Total"
+msgstr "الإجمالي"
+msgid "Clicks"
+msgstr "النقرات"
+msgid "No data yet."
+msgstr "لا توجد بيانات بعد."
