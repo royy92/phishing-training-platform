@@ -2,13 +2,30 @@
 {% load i18n %}
 
 {% block content %}
-  <h3>{% trans "Thank you!" %}</h3>
+     
+  <div class="text-center mx-auto" style="max-width: 760px;">
+    <h3 class="mb-3">{% trans "Thank you!" %}</h3>
 
-  {% if reported %}
-    <p>{% trans "Well done! You've reported a phishing message." %}</p>
-  {% else %}
-    <p>{% trans "Unfortunately, you clicked on a phishing link. Be careful!" %}</p>
-  {% endif %}
+    {% if reported %}
+      <p class="text-secondary">
+        {% trans "Great job spotting and reporting the phishing simulation! Your action demonstrates your commitment to safety. Continue to stay vigilant for unusual emails, suspicious links, and urgent requests—your awareness protects everyone!" %}
+      </p>
+    {% elif clicked %}
+      <p class="text-secondary">
+        {% trans "You clicked the link. This was a training simulation—review the warning signs before clicking next time." %}
+      </p>
+    {% else %}
+      <p class="text-secondary">
+        {% trans "Your response has been recorded." %}
+      </p>
+    {% endif %}
 
-  <a href="{% url 'home' %}" class="btn btn-primary">{% trans "Back to Home Page" %}</a>
+    <a href="{% url 'home' %}" class="btn btn-primary mt-3">
+      {% trans "Back to Home Page" %}
+    </a>
+  </div>
+
+
+    </div>
+  </div>
 {% endblock %}

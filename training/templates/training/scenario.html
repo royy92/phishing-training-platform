@@ -3,30 +3,63 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block content %}
-  <div class="text-center">
-    <h3 class="mb-3">
-      {% if LANGUAGE_CODE == 'ar' and scenario.title_ar %}
-        {{ scenario.title_ar }}
-      {% else %}
-        {{ scenario.title }}
-      {% endif %}
-    </h3>
-
-    <p class="text-secondary" style="max-width:800px;margin:0 auto;">
-      {% if LANGUAGE_CODE == 'ar' and scenario.message_ar %}
-        {{ scenario.message_ar }}
-      {% else %}
-        {{ scenario.message }}
-      {% endif %}
-    </p>
-
-    <div class="d-flex justify-content-center gap-3 mt-3">
-      <form method="post">{% csrf_token %}
-        <button name="action" value="report" class="btn btn-success">{% trans "reported the message" %}</button>
-      </form>
-      <form method="post" class="ms-2">{% csrf_token %}
-        <button name="action" value="click" class="btn btn-danger">{% trans "clicked on the link" %}</button>
-      </form>
+<div class="text-center" id="scenario-content">
+<h3 class="mb-3">
+  {% if retake_mode and display_title %}
+    {{ display_title }}
+  {% else %}
+    {% if LANGUAGE_CODE == 'ar' and scenario.title_ar %}
+      {{ scenario.title_ar }}
+    {% else %}
+      {{ scenario.title }}
+    {% endif %}
+  {% endif %}
+</h3>
+  {# Special alert for the hardest retake#}
+  {% if retake_mode and retake_level == "hard" %}
+    <div class="alert alert-dark mx-auto" style="max-width:760px; border:1px solid rgba(255,255,255,0.06);">
+      <strong>{% trans "Retake (Hard)" %}</strong>
+      — {% trans "This attempt is slightly more challenging. Examine the link carefully before clicking." %}
     </div>
+  {% endif %}
+
+  {# the message #}
+  <p class="text-secondary" style="max-width:800px;margin:0 auto;">
+    {% if rendered_message %}
+      {{ rendered_message|safe }}  
+    {% else %}
+      {% if LANGUAGE_CODE == 'ar' and scenario.message_ar %}
+        {{ scenario.message_ar|urlize }}
+      {% else %}
+        {{ scenario.message|urlize }}
+      {% endif %}
+    {% endif %}
+  </p>
+
+  {#Buttons (appear in both states: normal and retake)#}
+  <div class="d-flex justify-content-center gap-3 mt-4">
+
+<form method="post" action="{% url 'scenario' scenario.id %}">
+  {% csrf_token %}
+  {% if retake_mode and ctx %}
+    <input type="hidden" name="ctx" value="{{ ctx }}">
+  {% endif %}
+  <button name="action" value="report"
+          class="btn {% if retake_mode %}btn-outline-success{% else %}btn-success{% endif %}">
+    {% trans "reported the message" %}
+  </button>
+</form>
+   
+
+    {% if not retake_mode %}
+      <a href="{% url 'retake_scenario' scenario.id %}" class="btn btn-warning ms-2">
+        {% trans "Retake Phishing Test" %}
+      </a>
+    {% else %}
+      <a href="{% url 'scenario' scenario.id %}" class="btn btn-outline-light ms-2">
+        {% trans "Back to original" %}
+      </a>
+    {% endif %}
   </div>
+</div>
 {% endblock %}

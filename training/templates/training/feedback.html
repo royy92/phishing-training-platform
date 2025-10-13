@@ -1,0 +1,11 @@
+{# training/templates/training/feedback.html #}
+{% extends 'training/base.html' %}
+{% load i18n %}
+
+{% block content %}
+  <div class="text-center" style="max-width:760px;margin:0 auto;">
+    <h3 class="mb-3">{{ title }}</h3>
+    <p class="text-secondary">{{ body }}</p>
+    <a href="{{ back_url|default:'/' }}" class="btn btn-primary mt-3">{% trans "Back" %}</a>
+  </div>
+{% endblock %}

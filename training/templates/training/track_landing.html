@@ -1,0 +1,35 @@
+{% extends 'training/base.html' %}
+{% load i18n %}
+
+{% block content %}
+  <div class="text-center" style="max-width:720px;margin:0 auto;">
+    {% if ctx == "payment_retake" %}
+      <h3 class="mb-3">You clicked on a link in a payment message that could be a phishing attempt.</h3>
+      <p class="text-secondary">
+        Fraudsters frequently use fake invoice notifications to steal sensitive information or compromise company accounts.
+        Always verify unexpected payment requests and look closely at the sender and link addresses before taking any action.
+      </p>
+{% else %}
+  <h3 class="mb-3">{{ title }}</h3>
+  <p class="text-secondary">{{ body }}</p>
+    <p class="text-secondary">
+      {% trans "If this were a real phishing attempt, you might have exposed sensitive information. Always look for hints like misspelled domain names or urgent messages that pressure you to act quickly" %}
+    </p>
+  {% endif %}
+
+    {% if original_url %}
+      <div class="mt-3 p-3 bg-dark border rounded">
+        <strong>{% trans "Original link:" %}</strong>
+        <div class="mt-2"><code>{{ original_url }}</code></div>
+      </div>
+    {% endif %}
+
+    <div class="mt-4">
+      <a href="{% url 'scenario' scenario.id %}" class="btn btn-outline-light me-2">{% trans "Back to scenario" %}</a>
+      <a href="{% url 'report' %}" class="btn btn-primary">{% trans "Go to reports" %}</a>
+      {% if ctx != "payment_retake" %}
+        <a href="{% url 'retake_scenario' scenario.id %}" class="btn btn-warning ms-2">{% trans "Retake Phishing Test" %}</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
