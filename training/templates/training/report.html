@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <!-- Accuracy (آمن وبسيط) -->
+    <!-- Accuracy -->
     <div class="col-6 col-md-3">
       <div class="card text-bg-dark">
         <div class="card-body">
@@ -57,24 +57,40 @@
   </ul>
 
   <!-- Charts -->
-  <div class="row mt-4 g-4">
-    <div class="col-12 col-lg-8">
-      <div class="card text-bg-dark">
-        <div class="card-body">
-          <h5 class="card-title mb-3">{% trans "By scenario (bar chart)" %}</h5>
-          <canvas id="byScenarioChart" height="150"></canvas>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-lg-4">
-      <div class="card text-bg-dark">
-        <div class="card-body">
-          <h5 class="card-title mb-3">{% trans "Answer distribution" %}</h5>
-          <canvas id="distributionChart" height="150"></canvas>
+
+<style>
+  .chart-box { position: relative; height: 280px; }
+</style>
+
+<div class="row mt-4 g-4 align-items-stretch">
+  <!-- Bar chart -->
+  <div class="col-12 col-lg-8">
+    <div class="card text-bg-dark h-100">
+      <div class="card-body">
+        <h5 class="mb-2">By scenario (bar chart)</h5>
+        <div class="chart-box">
+          <canvas id="byScenarioChart"></canvas>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Answer distribution -->
+  <div class="col-12 col-lg-4">
+    <div class="card text-bg-dark h-100">
+      <div class="card-body">
+        <h5 class="mb-2">{% trans "Answer distribution" %}</h5>
+        <div class="chart-box">
+          <canvas id="distributionChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
   <h5 class="mt-4 d-flex align-items-center justify-content-between">
     <span>{% trans "By scenario" %}</span>

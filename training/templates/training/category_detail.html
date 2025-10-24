@@ -16,10 +16,10 @@
         text-align: center;
         font-weight: bold;
         margin-bottom: 40px;
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
 
-    .cards-container {
+    .scenarios-container {
         display: flex;
         justify-content: center;
         align-items: flex-start;
@@ -28,34 +28,36 @@
         margin-top: 30px;
     }
 
-    .category-card {
+    .scenario-card {
         background: linear-gradient(145deg, #1a1a1a, #141414);
         border-radius: 18px;
         box-shadow: 0 0 15px rgba(203, 166, 247, 0.15);
         padding: 25px;
         border: 1px solid #2a2a2a;
         width: 320px;
-        min-height: 220px;
-        text-align: center;
+        min-height: 200px;
         transition: all 0.3s ease;
-        order: 2; /* Normal cards go last */
     }
-    .category-card:hover {
+
+    .scenario-card:hover {
         transform: translateY(-6px);
         box-shadow: 0 0 30px rgba(203, 166, 247, 0.4);
         border-color: #cba6f7;
     }
-    .category-title {
+
+    .scenario-title {
         color: #cba6f7;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         font-weight: bold;
         margin-bottom: 10px;
     }
-    .category-desc {
+
+    .scenario-desc {
         color: #b3b3b3;
         font-size: 0.95rem;
         margin-bottom: 20px;
     }
+
     .btn-view {
         display: inline-block;
         padding: 8px 16px;
@@ -66,41 +68,28 @@
         font-weight: bold;
         transition: 0.3s;
     }
+
     .btn-view:hover {
         background-color: #dcb9fa;
         color: #111;
     }
-    .count {
-        color: #888;
-        font-size: 0.9rem;
-        margin-bottom: 10px;
-    }
-    /* ORDER CONTROL */
-    .left-card  { order: 0; }
-    .centered-card { order: 1; }
 </style>
 
 <div class="container">
-    <h2>Available Categories</h2>
-    <div class="cards-container">
-      {% for category in categories %}
-        <div class="category-card
-            {% if forloop.first %}centered-card
-            {% elif forloop.counter == 2 %}left-card
-            {% endif %}">
-          <h4 class="category-title">{{ category.name }}</h4>
-          {% with desc=category.description|default_if_none:'' %}
-          {% if desc %}
-          <p class="text-sm opacity-80">{{ desc }}</p>
-          {% endif %}
-          {% endwith %}
-          <p class="text-sm opacity-80">{{ category.description }}</p>
-          <p class="count">Scenarios: {{ category.scenarios.count }}</p>
-          <a href="{% url 'training:category_detail' category.slug %}" class="btn-view">
-            View Scenarios
-          </a>
+    <h2>{{ category.name }} Scenarios</h2>
+
+    {% if scenarios %}
+    <div class="scenarios-container">
+        {% for scenario in scenarios %}
+        <div class="scenario-card">
+            <h4 class="scenario-title">{{ scenario.title }}</h4>
+            <p class="scenario-desc">{{ scenario.message }}</p>
+            <p class="text-muted">{{ scenario.content }}</p>
         </div>
-      {% endfor %}
+        {% endfor %}
     </div>
+    {% else %}
+    <p class="text-center text-muted">No scenarios available yet.</p>
+    {% endif %}
 </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 phishing training platform (Django)
 
 
-Phishing scenario training app featuring multiple scenarios, login/registration support, (EN/AR), and interactive reporting dashboard.
+Phishing scenario training app featuring multiple scenarios, login/registration support, and interactive reporting dashboard.
 
 # Requermint 
 - Python 3.11+
@@ -15,6 +15,3 @@ python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
 
-#Translate
-python manage.py makemessages -l ar
-python manage.py compilemessages

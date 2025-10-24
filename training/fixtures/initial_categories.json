@@ -1,0 +1,111 @@
+[
+  {
+    "model": "training.category",
+    "pk": 1,
+    "fields": {
+      "name": "Anyone",
+      "slug": "anyone",
+      "description": "General awareness scenarios for anyone who uses email or online platforms — learn to spot and report phishing attempts effectively.",
+      "created_at": "2025-10-18T12:00:00Z"
+    }
+  },
+  {
+    "model": "training.category",
+    "pk": 2,
+    "fields": {
+      "name": "IT",
+      "slug": "it",
+      "description": "Focused simulations for IT personnel to identify sophisticated phishing tactics and respond with technical precision.",
+      "created_at": "2025-10-18T12:00:00Z"
+    }
+  },
+  {
+    "model": "training.category",
+    "pk": 3,
+    "fields": {
+      "name": "Students",
+      "slug": "students",
+      "description": "Interactive simulations designed to help students recognize and avoid phishing attacks in academic or personal settings.",
+      "created_at": "2025-10-18T12:00:00Z"
+    }
+  },
+
+  {
+    "model": "training.scenario",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "title": "Email from Bank: Verify your account",
+      "content": "An email pretending to be from a bank. The goal: identify suspicious domains and report phishing links.",
+      "difficulty": "easy",
+      "created_at": "2025-10-22T12:00:00Z",
+    "updated_at": "2025-10-22T12:00:00Z"
+
+    }
+  },
+  {
+    "model": "training.scenario",
+    "pk": 2,
+    "fields": {
+      "category": 1,
+      "title": "Reset Password Request (Fake IT)",
+      "content": "A fake IT email asks you to reset your password. Learn: verify sender, never click unknown links, report to security.",
+      "difficulty": "medium",
+      "created_at": "2025-10-22T12:00:00Z",
+    "updated_at": "2025-10-22T12:00:00Z"
+
+    }
+  },
+  {
+    "model": "training.scenario",
+    "pk": 3,
+    "fields": {
+      "category": 2,
+      "title": "Malicious Attachment Simulation",
+      "content": "Learn safe attachment handling, sandbox testing, and threat analysis.",
+      "difficulty": "medium",
+      "created_at": "2025-10-22T12:00:00Z",
+    "updated_at": "2025-10-22T12:00:00Z"
+
+    }
+  },
+  {
+    "model": "training.scenario",
+    "pk": 4,
+    "fields": {
+      "category": 2,
+      "title": "Fake System Update (Spear Phishing)",
+      "content": "Check sender domains, validate DKIM/SPF, verify official update sources.",
+      "difficulty": "hard",
+      "created_at": "2025-10-22T12:00:00Z",
+    "updated_at": "2025-10-22T12:00:00Z"
+
+    }
+  },
+  {
+    "model": "training.scenario",
+    "pk": 5,
+    "fields": {
+      "category": 3,
+      "title": "Executive Spear Phishing",
+      "content": "Analyze context clues, detect manipulation, and report suspicious emails.",
+      "difficulty": "hard",
+      "created_at": "2025-10-22T12:00:00Z",
+    "updated_at": "2025-10-22T12:00:00Z"
+
+    }
+  },
+  {
+    "model": "training.scenario",
+    "pk": 6,
+    "fields": {
+      "category": 3,
+      "title": "Post-Phish Response Simulation",
+      "content": "Learn how to recover compromised accounts, change passwords, and report incidents.",
+      "difficulty": "medium",
+      "created_at": "2025-10-22T12:00:00Z",
+    "updated_at": "2025-10-22T12:00:00Z"
+
+    }
+  }
+]

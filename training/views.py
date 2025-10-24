@@ -6,14 +6,20 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.db.models import Count, Sum
 from django.utils.html import mark_safe
-from .models import Scenario, UserResponse
+from .models import Scenario, UserResponse, Category
 
 URL_RE = re.compile(r'https?://[^\s]+')
 
 @login_required
 def home(request):
-    scenarios = Scenario.objects.all()
-    return render(request, 'training/home.html', {'scenarios': scenarios})
+    categories = Category.objects.all().prefetch_related("scenarios")
+    return render(request, "training/home.html", {"categories": categories})
+
+def category_detail(request, slug):
+    category = get_object_or_404(Category.objects.prefetch_related("scenarios"), slug=slug)
+    scenarios = category.scenarios.all()
+    return render(request, "training/category_detail.html", {"category": category, "scenarios": scenarios})
+
 
 
 def _mutate_url(original_url):
