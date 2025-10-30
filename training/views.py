@@ -6,7 +6,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.db.models import Count, Sum
 from django.utils.html import mark_safe
-from .models import Scenario, UserResponse, Category
+from .models import Category, Scenario, ScenarioStep, UserScenarioRun, UserAction, render_step_body
+from django.http import HttpResponse, JsonResponse, Http404
+from django.utils import timezone
+from django.views.decorators.http import require_POST
+import random, string, csv
+
+
 
 URL_RE = re.compile(r'https?://[^\s]+')
 
@@ -14,6 +20,128 @@ URL_RE = re.compile(r'https?://[^\s]+')
 def home(request):
     categories = Category.objects.all().prefetch_related("scenarios")
     return render(request, "training/home.html", {"categories": categories})
+
+
+def run_start(request, scenario_id):
+    scenario = get_object_or_404(Scenario, pk=scenario_id)
+    run = UserScenarioRun.objects.create(
+        user=request.user,
+        scenario=scenario,
+        next_remaining=scenario.depth,
+        step_index=1,
+        context={
+            "bank_name": random.choice(["National Bank","SecurePay","Trust Bank"]),
+            "last4": "".join(random.choices(string.digits, k=4)),
+            "otp": "".join(random.choices(string.digits, k=6)),
+            "student_portal": "https://portal.univ.example",
+            "api_token": "tok_" + "".join(random.choices(string.ascii_lowercase+string.digits, k=12)),
+        }
+    )
+    return redirect("training:run_step", run_uuid=run.run_uuid, index=1)
+
+
+@login_required
+def run_step(request, run_uuid, index):
+    run = get_object_or_404(UserScenarioRun, run_uuid=run_uuid, user=request.user)
+    steps = list(run.scenario.steps.all())
+    if index < 1 or index > len(steps): raise Http404()
+
+    step = steps[index-1]
+    # Deepest Depth Update
+    run.depth_max = max(run.depth_max, index)
+    run.save(update_fields=["depth_max"])
+
+    context = run.context
+    rendered_body = render_step_body(step, context)
+
+    # Temporary (for IT/professional)
+    deadline = None
+    if step.timer_seconds:
+        deadline = (timezone.now() + timezone.timedelta(seconds=step.timer_seconds)).timestamp()
+
+    return render(request, "training/run_step.html", {
+        "run": run,
+        "step": step,
+        "index": index,
+        "total": len(steps),
+        "deadline": deadline,
+        "rendered_body": rendered_body,
+    })
+
+
+@require_POST
+@login_required
+def run_action(request, run_uuid):
+    run = get_object_or_404(UserScenarioRun, run_uuid=run_uuid, user=request.user)
+    action = request.POST.get("action")  # next/back/click/submit/report/timeout
+    step_id = int(request.POST.get("step_id"))
+    step = get_object_or_404(ScenarioStep, pk=step_id)
+
+    payload = {}
+    if action == "submit":
+        # Save any form fields
+        for key, val in request.POST.items():
+            if key.startswith("f_"):
+                payload[key] = val
+
+        # Example: If you enter the MFA/OTP form incorrectly → "Verification failed"
+        if step.step_type in ("fake_login","form"):
+            payload["verification"] = "failed"
+
+    # points
+    delta = UserAction.apply_scoring(action, step.step_type, payload)
+    UserAction.objects.create(run=run, step=step, action=action, delta=delta, payload=payload)
+    run.score += delta
+
+    # Pointer movement + counters
+    if action == "next":
+        run.next_count += 1
+        run.next_remaining = max(0, run.next_remaining - 1)
+        run.step_index = min(run.step_index + 1, run.scenario.steps.count())
+    elif action == "back":
+        run.back_count += 1
+        run.step_index = max(1, run.step_index - 1)
+        # back does not increase next_remaining, it only reverses one step
+    elif action in ("click","submit","report","timeout"):
+        # Remains at the same step, only points/recording
+        pass
+
+    run.save()
+
+    return redirect("training:run_step", run_uuid=run.run_uuid, index=run.step_index)
+
+
+@login_required
+def track_link(request, run_uuid, step_id, link_slug):
+    run  = get_object_or_404(UserScenarioRun, run_uuid=run_uuid, user=request.user)
+    step = get_object_or_404(ScenarioStep, pk=step_id, scenario=run.scenario)
+    # register “click”
+    delta = UserAction.apply_scoring('click', step.step_type, {})
+    UserAction.objects.create(run=run, step=step, action='click', delta=delta)
+    run.score += delta
+    run.save(update_fields=['score'])
+    # Redirect the user to a “fake” page if one exists, or return them to the same step.
+    if step.step_type == 'email' and step.link_slug:
+        return redirect("training:run_step", run_uuid=run.run_uuid, index=run.step_index+1)  # Example: This takes it to the fake_login step.
+    return redirect("training:run_step", run_uuid=run.run_uuid, index=run.step_index)
+
+
+
+def reports(request):
+    runs = UserScenarioRun.objects.select_related("scenario","user").order_by("-started_at")
+    return render(request, "training/reports.html", {"runs": runs})
+
+
+def reports_csv(request):
+    # CSV: session/user/scenario/points/depth/number next/back
+    response = HttpResponse(content_type="text/csv")
+    response['Content-Disposition'] = 'attachment; filename="scenario_report.csv"'
+    writer = csv.writer(response)
+    writer.writerow(["User","Scenario","Score","Depth Max","Next Count","Back Count","Started","Finished"])
+    for r in UserScenarioRun.objects.select_related("user","scenario"):
+        writer.writerow([r.user.username, r.scenario.title, r.score, r.depth_max, r.next_count, r.back_count, r.started_at, r.finished_at])
+    return response
+
 
 def category_detail(request, slug):
     category = get_object_or_404(Category.objects.prefetch_related("scenarios"), slug=slug)

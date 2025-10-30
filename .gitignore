@@ -1,56 +1,29 @@
-
-env/
+# Python
 __pycache__/
-
-
-db.sqlite3
-*.pyc
-
-
-*.log
-*.pot
 *.py[cod]
-*.swp
-
-
-
-*/migrations/*.pyc
-*/migrations/__pycache__/
-# Python / venv
-venv/
-.venv/
-env/
-pip-wheel-metadata/
 *.egg-info/
-*.pyc
-__pycache__/
+*.log
 
-# OS / IDE
-.DS_Store
-.idea/
-.vscode/
-*.swp
+# Virtual env
+.venv/
+venv/
 
 # Django
 db.sqlite3
 *.sqlite3
-*.log
-
-# static/media resulting from operation
-staticfiles/
-static_root/
 media/
-
-
-# Tests / tooling
-.coverage
-htmlcov/
-.pytest_cache/
-
-# Node
-node_modules/
-
-# Secrets
+staticfiles/
+static/
 .env
-.env.*
-.python-version
+
+# OS/editor junk
+.DS_Store
+.vscode/
+.idea/
+
+# Migrations cache 
+**/__pycache__/
+
+# Backups
+*.bak
+*.tar.gz
