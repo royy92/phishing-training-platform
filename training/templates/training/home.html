@@ -88,13 +88,8 @@
             {% if forloop.first %}centered-card
             {% elif forloop.counter == 2 %}left-card
             {% endif %}">
+
           <h4 class="category-title">{{ category.name }}</h4>
-          {% with desc=category.description|default_if_none:'' %}
-          {% if desc %}
-          <p class="text-sm opacity-80">{{ desc }}</p>
-          {% endif %}
-          {% endwith %}
-          <p class="text-sm opacity-80">{{ category.description }}</p>
           <p class="count">Scenarios: {{ category.scenarios.count }}</p>
           <a href="{% url 'training:category_detail' category.slug %}" class="btn-view">
             View Scenarios

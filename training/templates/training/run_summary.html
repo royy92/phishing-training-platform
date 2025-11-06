@@ -1,0 +1,43 @@
+{% extends "training/base.html" %}
+{% block content %}
+
+<div class="container py-5 text-center">
+  <h2 class="text-purple-400 mb-4 fw-bold">🎯 Scenario Completed</h2>
+
+  <div class="card p-4 bg-dark border rounded-3 shadow-lg mx-auto" style="max-width: 650px;">
+    <p class="text-light mb-3 fs-5">
+      You have completed the scenario: <strong>{{ run.scenario.title }}</strong>.
+    </p>
+
+    {% if run.finished_at and run.step_index < run.scenario.steps.count %}
+      <p class="text-warning fw-semibold">
+        ⚠️ The simulation was ended early (via the Back button).
+      </p>
+    {% else %}
+      <p class="text-success fw-semibold">
+        ✅ You’ve successfully finished all {{ steps_done }} steps!
+      </p>
+    {% endif %}
+
+    <!-- 🔹 Score Card -->
+    <div class="mt-4 p-3 rounded-3 bg-secondary bg-opacity-25 border border-secondary">
+      <h5 class="mb-2 text-light">Your Final Score</h5>
+      <h2  class="fw-bold" style="color: #cba6f7; font-size: 3rem;">{{ run.score }}</h2>
+      <p class=" small mb-0" style="color: #ffffff;">
+        Depth Reached: <strong>{{ run.depth_max }}</strong> / {{ steps_done }}
+      </p>
+    </div>
+
+    <div class="mt-5">
+      <a href="{% url 'training:report' %}" class="btn btn-outline-light me-2"> View Report</a>
+      <a href="{% url 'training:home' %}" class="btn btn-primary"
+         style="background-color:#d8b4fe; color:#000; font-weight:600;
+                 border:none; border-radius:6px; padding:8px 20px;
+                 transition:all 0.3s ease;"
+          onmouseover="this.style.backgroundColor='#e9d5ff'; this.style.transform='scale(1.05)';"
+          onmouseout="this.style.backgroundColor='#d8b4fe'; this.style.transform='scale(1)';"> Back to Home</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

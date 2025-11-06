@@ -1,0 +1,89 @@
+{% extends "training/base.html" %}
+{% block content %}
+
+<div class="container py-5 text-center">
+  <h3 class="text-purple-400 mb-4">Step {{ step_index }} of {{ total_steps }}</h3>
+
+  <div id="timer" class="mb-3 text-warning" style="font-size: 1.2rem;"></div>
+
+  <div class="card p-4 bg-dark border rounded-3 mx-auto" style="max-width: 600px;">
+    <p>{{ rendered_body|safe }}</p>
+
+    <!-- ✅ New buttons (Back takes you directly to the final page) -->
+    <form method="post" action="{% url 'training:run_action' run_uuid=run.run_uuid %}">
+      {% csrf_token %}
+      <input type="hidden" name="step_id" value="{{ step.id }}">
+
+      <div class="mt-4 d-flex justify-content-between">
+
+        <!-- Back button -->
+        <button type="submit" name="action" value="back"
+          class="btn btn-outline-light"
+          style="border-color:#a855f7; color:#a855f7; transition:all 0.3s ease;"
+          onmouseover="this.style.backgroundColor='#a855f7'; this.style.color='#fff';"
+          onmouseout="this.style.backgroundColor='transparent'; this.style.color='#a855f7';">
+           Back
+        </button>
+
+        <!-- Next button -->
+        {% if next_step %}
+        <button type="submit" name="action" value="next"
+          class="btn"
+          style="background-color:#d8b4fe; color:#000; font-weight:600;
+                 border:none; border-radius:6px; padding:8px 20px;
+                 transition:all 0.3s ease;"
+          onmouseover="this.style.backgroundColor='#e9d5ff'; this.style.transform='scale(1.05)';"
+          onmouseout="this.style.backgroundColor='#d8b4fe'; this.style.transform='scale(1)';">
+          Next 
+        </button>
+        {% else %}
+        <a href="{% url 'training:run_summary' run_uuid %}" class="btn btn-success">Finish</a>
+        {% endif %}
+
+      </div>
+    </form>
+  </div>
+
+  <div class="mt-3 text-muted small">
+    <span>Remaining Steps: {{ run.next_remaining }}</span> |
+    <span>Score: {{ run.score }}</span>
+  </div>
+</div>
+
+{% if step.timer_seconds %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const el = document.getElementById("timer");
+  let deadline = Date.now() + ({{ step.timer_seconds }} * 1000);
+
+  const tick = () => {
+    let remaining = Math.ceil((deadline - Date.now()) / 1000);
+    if (remaining > 0) {
+      el.textContent = " Time left: " + remaining + "s";
+      setTimeout(tick, 1000);
+    } else {
+      el.textContent = " Time’s up!";
+      // Automatically submit the "timeout" action
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "{% url 'training:run_action' run_uuid %}";
+      const csrf = document.createElement("input");
+      csrf.type = "hidden";
+      csrf.name = "csrfmiddlewaretoken";
+      csrf.value = "{{ csrf_token }}";
+      const act = document.createElement("input");
+      act.type = "hidden";
+      act.name = "action";
+      act.value = "timeout";
+      form.appendChild(csrf);
+      form.appendChild(act);
+      document.body.appendChild(form);
+      form.submit();
+    }
+  };
+
+  tick();
+});
+</script>
+{% endif %}
+{% endblock %}

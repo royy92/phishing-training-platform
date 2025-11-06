@@ -3,8 +3,30 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.utils.text import slugify
 from django.template import Template, Context
+from django.utils import timezone
+import uuid
 import uuid, json
 
+class Step(models.Model):
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    scenario = models.ForeignKey('Scenario', on_delete=models.CASCADE, related_name='new_steps')
+
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+
+    order = models.PositiveIntegerField(default=1)  
+    timer_seconds = models.PositiveIntegerField(null=True, blank=True)  
+    score_value = models.IntegerField(default=0)
+
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.scenario.title} - Step {self.order}: {self.title}"
 class Category(models.Model):
     name = models.CharField(max_length=120, unique=True)
     slug = models.SlugField(max_length=140, unique=True, blank=True, null=True)

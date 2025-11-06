@@ -74,22 +74,50 @@
         color: #111;
     }
 </style>
+<div class="container text-center py-5">
+  <h2 class="text-purple-400 mb-4">{{ category.name }} Scenarios</h2>
+  <div class="d-flex justify-content-center flex-wrap gap-4">
+    {% for scenario in scenarios %}
+      <div class="card p-4 text-center"
+           style="
+             width: 300px;
+             background: linear-gradient(145deg, #0e0e16, #1a1a27);
+             border: 1px solid #2a2a2a;
+             border-radius: 15px;
+             box-shadow: 0 0 18px rgba(168,85,247,0.25);
+             transition: all 0.3s ease;
+           "
+           onmouseover="this.style.boxShadow='0 0 30px rgba(168,85,247,0.4)'; this.style.transform='scale(1.02)';"
+           onmouseout="this.style.boxShadow='0 0 18px rgba(168,85,247,0.25)'; this.style.transform='scale(1)';">
+        
+        <h4 class="text-light mb-2 fw-bold">{{ scenario.title }}</h4>
+        <p class="text-muted small mb-3">{{ scenario.description }}</p>
 
-<div class="container">
-    <h2>{{ category.name }} Scenarios</h2>
+        <!--  View Scenario -->
+        <a href="{% url 'training:run_start' scenario.id %}"
+           class="btn fw-bold"
+           style="
+             background-color:#d8b4fe;
+             color:#000;
+             border:none;
+             border-radius:8px;
+             padding:8px 20px;
+             font-weight:600;
+             transition:all 0.3s ease;
+             text-decoration:none;
+           "
+           onmouseover="this.style.backgroundColor='#e9d5ff'; this.style.transform='scale(1.05)';"
+           onmouseout="this.style.backgroundColor='#d8b4fe'; this.style.transform='scale(1)';">
+           Start Scenario
+        </a>
 
-    {% if scenarios %}
-    <div class="scenarios-container">
-        {% for scenario in scenarios %}
-        <div class="scenario-card">
-            <h4 class="scenario-title">{{ scenario.title }}</h4>
-            <p class="scenario-desc">{{ scenario.message }}</p>
-            <p class="text-muted">{{ scenario.content }}</p>
-        </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <p class="text-center text-muted">No scenarios available yet.</p>
-    {% endif %}
+      </div>
+    {% empty %}
+      <p class="text-muted">No scenarios available for this category.</p>
+    {% endfor %}
+  </div>
 </div>
+
 {% endblock %}
+</style>
+
