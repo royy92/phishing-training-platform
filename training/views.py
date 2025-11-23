@@ -37,6 +37,26 @@ def home(request):
     return render(request, "training/home.html", {"categories": categories})
 
 
+def profile(request):
+    return render(request, 'training/profile.html')
+
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('training:home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'training/signup.html', {'form': form})
+
+
+
+
+
 def run_start(request, scenario_id):
     scenario = get_object_or_404(Scenario, pk=scenario_id)
     run = UserScenarioRun.objects.create(

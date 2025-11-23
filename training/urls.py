@@ -13,6 +13,10 @@ urlpatterns = [
     path('run/<uuid:run_uuid>/step/<int:index>/', views.run_step, name='run_step'),
     path('run/<uuid:run_uuid>/action/', views.run_action, name='run_action'),
     path('run/<uuid:run_uuid>/summary/', views.run_summary, name='run_summary'),
+    path('signup/', views.signup, name='signup'),
+    path('accounts/profile/', views.profile, name='profile'),
+
+
 
     path('track/<uuid:run_uuid>/<int:step_id>/<slug:link_slug>/', views.track_link, name='track_link'),
 

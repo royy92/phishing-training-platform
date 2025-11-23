@@ -50,7 +50,7 @@ background:transparent; border-radius:10px;
       <a class="btn btn-ghost btn-sm" href="{% url 'logout' %}">Logout</a>
     {% else %}
       <a class="btn btn-ghost btn-sm" href="{% url 'login' %}">Login</a>
-      <a class="btn btn-primary btn-sm" href="{% url 'signup' %}">Sign up</a>
+      <a class="btn btn-primary btn-sm" href="{% url 'training:signup' %}">Sign up</a>
     {% endif %}
   </div>
 </div>

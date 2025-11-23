@@ -1,11 +1,9 @@
-{% extends 'training/base.html' %}
-{% load i18n %}
-
+{% extends "training/base.html" %}
 {% block content %}
-  <h2>{% trans "Create Account" %}</h2>
+  <h2>Sign Up</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">{% trans "Sign up" %}</button>
+    <button type="submit" class="btn btn-primary">Create Account</button>
   </form>
 {% endblock %}
