@@ -1,0 +1,329 @@
+[
+{
+  "model": "training.category",
+  "pk": 1,
+  "fields": {
+    "name": "Anyone",
+    "slug": "anyone",
+    "description": "No description provided",
+    "created_at": "2025-10-29T21:22:51.399Z",
+    "updated_at": "2025-10-29T21:22:51.399Z"
+  }
+},
+{
+  "model": "training.category",
+  "pk": 2,
+  "fields": {
+    "name": "Students",
+    "slug": "students",
+    "description": "No description provided",
+    "created_at": "2025-10-29T21:22:51.416Z",
+    "updated_at": "2025-10-29T21:22:51.416Z"
+  }
+},
+{
+  "model": "training.category",
+  "pk": 3,
+  "fields": {
+    "name": "IT / Professionals",
+    "slug": "it",
+    "description": "No description provided",
+    "created_at": "2025-10-29T21:22:51.435Z",
+    "updated_at": "2025-10-29T21:22:51.435Z"
+  }
+},
+{
+  "model": "training.scenario",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "title": "Unusual Sign-in Activity",
+    "message": "We detected unusual sign-in activity.",
+    "content": null,
+    "is_phishing": true,
+    "difficulty": "beginner",
+    "depth": 5,
+    "created_at": "2025-10-30T23:22:48.753Z",
+    "updated_at": "2025-10-30T23:22:48.753Z"
+  }
+},
+{
+  "model": "training.scenario",
+  "pk": 2,
+  "fields": {
+    "category": 2,
+    "title": "Scholarship Delay Verification",
+    "message": "Scholarship payout delayed — verify account.",
+    "content": null,
+    "is_phishing": true,
+    "difficulty": "intermediate",
+    "depth": 5,
+    "created_at": "2025-10-30T23:22:48.868Z",
+    "updated_at": "2025-10-30T23:22:48.868Z"
+  }
+},
+{
+  "model": "training.scenario",
+  "pk": 3,
+  "fields": {
+    "category": 3,
+    "title": "Suspicious API Session",
+    "message": "Suspicious API session detected",
+    "content": null,
+    "is_phishing": true,
+    "difficulty": "advanced",
+    "depth": 5,
+    "created_at": "2025-10-30T23:22:48.972Z",
+    "updated_at": "2025-10-30T23:22:48.972Z"
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 1,
+  "fields": {
+    "scenario": 1,
+    "order": 1,
+    "step_type": "email",
+    "title": "Security Alert",
+    "body": "We've noticed unusual sign-in activity on your {{bank_name}} account. Please verify your identity via the link below.",
+    "link_slug": "verify-login",
+    "form_schema": null,
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 2,
+  "fields": {
+    "scenario": 1,
+    "order": 2,
+    "step_type": "fake_login",
+    "title": "Verify your account",
+    "body": "Please enter your username and password to continue.",
+    "link_slug": "",
+    "form_schema": [
+      {
+        "name": "username",
+        "label": "Username",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "password",
+        "label": "Password",
+        "type": "password",
+        "required": true
+      }
+    ],
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 3,
+  "fields": {
+    "scenario": 1,
+    "order": 3,
+    "step_type": "form",
+    "title": "Two-Factor Verification",
+    "body": "Enter the 6-digit code sent to your device.",
+    "link_slug": "",
+    "form_schema": [
+      {
+        "name": "otp",
+        "label": "6-digit code",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 4,
+  "fields": {
+    "scenario": 1,
+    "order": 4,
+    "step_type": "call",
+    "title": "Phone Call",
+    "body": "Agent: Hello, I'm calling from {{bank_name}}. To regain access, please provide the code and last 4 digits ({{last4}}).",
+    "link_slug": "",
+    "form_schema": null,
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 5,
+  "fields": {
+    "scenario": 1,
+    "order": 5,
+    "step_type": "summary",
+    "title": "Reflection",
+    "body": "Indicators you missed: unexpected link, domain mismatch, rushed requests. Next time: verify sender/domain and report immediately.",
+    "link_slug": "",
+    "form_schema": null,
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 6,
+  "fields": {
+    "scenario": 2,
+    "order": 1,
+    "step_type": "email",
+    "title": "Scholarship Notice",
+    "body": "Your scholarship payout is delayed pending account verification. Visit {{student_portal}} or click the link below to verify.",
+    "link_slug": "verify-scholarship",
+    "form_schema": null,
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 7,
+  "fields": {
+    "scenario": 2,
+    "order": 2,
+    "step_type": "form",
+    "title": "Verification Form",
+    "body": "Fill the following fields to continue.",
+    "link_slug": "",
+    "form_schema": [
+      {
+        "name": "student_id",
+        "label": "Student ID",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "iban",
+        "label": "IBAN",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 8,
+  "fields": {
+    "scenario": 2,
+    "order": 3,
+    "step_type": "call",
+    "title": "Phone Call",
+    "body": "Caller: We need the OTP to complete your scholarship verification. Please read it to me.",
+    "link_slug": "",
+    "form_schema": null,
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 9,
+  "fields": {
+    "scenario": 2,
+    "order": 4,
+    "step_type": "notice",
+    "title": "Account Hold",
+    "body": "Your account has been temporarily suspended pending verification. Use the link to resume.",
+    "link_slug": "",
+    "form_schema": null,
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 10,
+  "fields": {
+    "scenario": 2,
+    "order": 5,
+    "step_type": "summary",
+    "title": "Reflection",
+    "body": "Never share OTP or banking info via calls/emails. Use official portals and validate URLs.",
+    "link_slug": "",
+    "form_schema": null,
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 11,
+  "fields": {
+    "scenario": 3,
+    "order": 1,
+    "step_type": "notice",
+    "title": "API Session Alert",
+    "body": "We detected an unusual API session using token {{api_token}}. Review CSP and proceed to the secure portal.",
+    "link_slug": "secure-portal",
+    "form_schema": null,
+    "timer_seconds": 600
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 12,
+  "fields": {
+    "scenario": 3,
+    "order": 2,
+    "step_type": "fake_login",
+    "title": "SSO Login",
+    "body": "Sign in with your organization account.",
+    "link_slug": "",
+    "form_schema": [
+      {
+        "name": "email",
+        "label": "Work Email",
+        "type": "email",
+        "required": true
+      },
+      {
+        "name": "password",
+        "label": "Password",
+        "type": "password",
+        "required": true
+      }
+    ],
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 13,
+  "fields": {
+    "scenario": 3,
+    "order": 3,
+    "step_type": "form",
+    "title": "Token Action",
+    "body": "Choose an action for token {{api_token}}",
+    "link_slug": "",
+    "form_schema": [
+      {
+        "name": "action",
+        "label": "Action (revoke/approve)",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "timer_seconds": null
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 14,
+  "fields": {
+    "scenario": 3,
+    "order": 4,
+    "step_type": "reward",
+    "title": "Service Credits",
+    "body": "You are eligible for 15% service fee rewards. Click to activate now.",
+    "link_slug": "",
+    "form_schema": null,
+    "timer_seconds": null
+  }
+}
+]
