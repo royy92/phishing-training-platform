@@ -1,0 +1,40 @@
+{% extends "training/base.html" %}
+{% block content %}
+
+<div class="container py-5 text-center">
+  <div class="card bg-dark border-danger shadow-lg mx-auto p-4" style="max-width:750px;">
+    <h2 class="text-danger mb-3 fw-bold">⚠️ Security Risk Alert</h2>
+
+    <!-- Scenario Title -->
+    <p class="text-light mb-3 fs-5">
+      You went back during <strong>{{ scenario_name }}</strong>.
+    </p>
+
+    <!-- Risk Type -->
+    <div class="alert alert-danger border-0 text-start" style="background-color:#2b2735; color:#fff;">
+      <h5 class="fw-bold text-warning mb-2">🧠 {{ risk_type }}</h5>
+      <p class="mb-2">{{ risk_message }}</p>
+      <p class="text-info mb-0">
+        <strong>💡 Awareness Tip:</strong> {{ awareness_tip }}
+      </p>
+    </div>
+
+    <!-- Score Feedback -->
+    <hr class="my-4 border-secondary">
+    <p class="text-light">
+      <strong>Your current score:</strong> {{ score }}<br>
+      <span class="text-warning">{{ score_feedback }}</span>
+    </p>
+
+    <!-- Back to Dashboard -->
+    <div class="mt-4">
+      <a href="{% url 'training:home' %}" 
+         class="btn btn-outline-light px-4 py-2 fw-semibold"
+         style="border-radius:8px;">
+         Return to Dashboard
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

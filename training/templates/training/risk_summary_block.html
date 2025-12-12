@@ -1,0 +1,22 @@
+{% if "financial" in risk_type|lower %}
+  {% set icon = "🟠" %}
+{% elif "credential" in risk_type|lower or "data" in risk_type|lower %}
+  {% set icon = "🔴" %}
+{% elif "system" in risk_type|lower or "api" in risk_type|lower %}
+  {% set icon = "🟣" %}
+{% else %}
+  {% set icon = "🟢" %}
+{% endif %}
+
+<div class="mt-4 p-3 border rounded bg-dark-subtle text-light shadow-sm">
+  <h5 class="text-info mb-3">{{ icon }} Awareness Insight</h5>
+
+  <p><strong>Scenario:</strong> {{ scenario_name }}</p>
+  <p><strong>Risk Type:</strong> {{ risk_type }}</p>
+  <p><strong>Description:</strong> {{ risk_message }}</p>
+  <p><strong>Tip:</strong> {{ awareness_tip }}</p>
+
+  <hr class="my-3">
+  <p><strong> Feedback:</strong> {{ score_feedback }}</p>
+  <p><strong> Current Score:</strong> {{ score }}</p>
+</div>

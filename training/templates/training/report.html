@@ -1,182 +1,161 @@
-{% extends 'training/base.html' %}
-{% load i18n %}
-
+{% extends "training/base.html" %}
 {% block content %}
-  <h2 class="mb-3">{% trans "Reports" %}</h2>
 
-  <!-- KPIs -->
-  <div class="row g-3">
-    <div class="col-6 col-md-3">
-      <div class="card text-bg-dark">
-        <div class="card-body">
-          <div class="small text-secondary">{% trans "Total attempts" %}</div>
-          <div class="fs-4 fw-bold">{{ mine.total|default:0 }}</div>
-        </div>
-      </div>
-    </div>
-    <div class="col-6 col-md-3">
-      <div class="card text-bg-dark">
-        <div class="card-body">
-          <div class="small text-secondary">{% trans "Wrong clicks" %}</div>
-          <div class="fs-4 fw-bold">{{ mine.clicks|default:0 }}</div>
-        </div>
-      </div>
-    </div>
-    <div class="col-6 col-md-3">
-      <div class="card text-bg-dark">
-        <div class="card-body">
-          <div class="small text-secondary">{% trans "Correct reports" %}</div>
-          <div class="fs-4 fw-bold">{{ mine.reports|default:0 }}</div>
-        </div>
-      </div>
-    </div>
-    <!-- Accuracy -->
-    <div class="col-6 col-md-3">
-      <div class="card text-bg-dark">
-        <div class="card-body">
-          <div class="small text-secondary">{% trans "Accuracy" %}</div>
-          {% with total=mine.total|default_if_none:0|default:0 correct=mine.reports|default_if_none:0|default:0 %}
-            <div class="fs-4 fw-bold">
-              {% if total|add:0 > 0 %}
-                {% widthratio correct total 100 %}%
-              {% else %}
-                0%
-              {% endif %}
-            </div>
-          {% endwith %}
-        </div>
+<div class="container py-5 text-light">
+
+  <h2 class="text-center mb-5 text-info fw-bold">📊 Awareness Comparison by Category</h2>
+
+  <!-- 🟦 Awareness Bar - First Scenario -->
+  <div class="mb-4">
+    <h5 class="text-light mb-2 fw-semibold">First Scenario Awareness Level</h5>
+    <div class="progress" style="height: 25px; border-radius: 12px; background-color: #2a2a2a;">
+      <div class="progress-bar bg-primary fw-bold"
+           role="progressbar"
+           style="width: {{ first_awareness }}%; transition: width 1s ease-in-out;"
+           aria-valuenow="{{ first_awareness }}" aria-valuemin="0" aria-valuemax="100">
+        {{ first_awareness }}%
       </div>
     </div>
   </div>
 
-  <h5 class="mt-4">{% trans "Your performance" %}</h5>
-  <ul>
-    <li>{% trans "Total attempts" %}: {{ mine.total|default:0 }}</li>
-    <li>{% trans "Wrong clicks" %}: {{ mine.clicks|default:0 }}</li>
-    <li>{% trans "Correct reports" %}: {{ mine.reports|default:0 }}</li>
-  </ul>
+  <!-- 🔹 First Scenario Section -->
+  <h4 class="text-primary mb-3 fw-semibold">🧩 First Scenario per Category</h4>
+  <div class="table-responsive mb-5">
+    <table class="table table-dark table-striped table-bordered text-center align-middle">
+      <thead class="table-secondary text-dark">
+        <tr>
+          <th>Category</th>
+          <th>Scenario</th>
+          <th>Score</th>
+          <th>Backs</th>
+          <th>Nexts</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in first_data %}
+        <tr>
+          <td>{{ s.category }}</td>
+          <td>{{ s.scenario }}</td>
+          <td class="{% if s.score >= 4 %}text-success{% elif s.score >= 2 %}text-warning{% else %}text-danger{% endif %}">
+            {{ s.score }}
+          </td>
+          <td>{{ s.backs }}</td>
+          <td>{{ s.nexts }}</td>
+          <td>{{ s.date }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-muted text-center">No data for first scenarios.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-  <!-- Charts -->
-
-<style>
-  .chart-box { position: relative; height: 280px; }
-</style>
-
-<div class="row mt-4 g-4 align-items-stretch">
-  <!-- Bar chart -->
-  <div class="col-12 col-lg-8">
-    <div class="card text-bg-dark h-100">
-      <div class="card-body">
-        <h5 class="mb-2">By scenario (bar chart)</h5>
-        <div class="chart-box">
-          <canvas id="byScenarioChart"></canvas>
-        </div>
+  <!-- 🟩 Awareness Bar - Second Scenario -->
+  <div class="mb-4">
+    <h5 class="text-light mb-2 fw-semibold">Second Scenario Awareness Level</h5>
+    <div class="progress" style="height: 25px; border-radius: 12px; background-color: #2a2a2a;">
+      <div class="progress-bar bg-success fw-bold"
+           role="progressbar"
+           style="width: {{ second_awareness }}%; transition: width 1s ease-in-out;"
+           aria-valuenow="{{ second_awareness }}" aria-valuemin="0" aria-valuemax="100">
+        {{ second_awareness }}%
       </div>
     </div>
   </div>
 
-  <!-- Answer distribution -->
-  <div class="col-12 col-lg-4">
-    <div class="card text-bg-dark h-100">
-      <div class="card-body">
-        <h5 class="mb-2">{% trans "Answer distribution" %}</h5>
-        <div class="chart-box">
-          <canvas id="distributionChart"></canvas>
-        </div>
-      </div>
-    </div>
+  <!-- 🔹 Second Scenario Section -->
+  <h4 class="text-success mb-3 fw-semibold">🧩 Second Scenario per Category</h4>
+  <div class="table-responsive mb-5">
+    <table class="table table-dark table-striped table-bordered text-center align-middle">
+      <thead class="table-secondary text-dark">
+        <tr>
+          <th>Category</th>
+          <th>Scenario</th>
+          <th>Score</th>
+          <th>Backs</th>
+          <th>Nexts</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in second_data %}
+        <tr>
+          <td>{{ s.category }}</td>
+          <td>{{ s.scenario }}</td>
+          <td class="{% if s.score >= 4 %}text-success{% elif s.score >= 2 %}text-warning{% else %}text-danger{% endif %}">
+            {{ s.score }}
+          </td>
+          <td>{{ s.backs }}</td>
+          <td>{{ s.nexts }}</td>
+          <td>{{ s.date }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-muted text-center">No data for second scenarios.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 🔹 Comparison Chart -->
+  <h4 class="text-info mb-4 fw-semibold">📈 Comparison Chart (First vs Second Scenario)</h4>
+  <div class="bg-dark p-4 rounded shadow">
+    <canvas id="compareChart"></canvas>
   </div>
 </div>
 
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const categories = JSON.parse('{{ chart_categories|safe|escapejs }}');
+  const firstAwareness = JSON.parse('{{ chart_first_awareness|safe|escapejs }}');
+  const secondAwareness = JSON.parse('{{ chart_second_awareness|safe|escapejs }}');
 
-
-
-
-  <h5 class="mt-4 d-flex align-items-center justify-content-between">
-    <span>{% trans "By scenario" %}</span>
-    <button id="exportCsvBtn" class="btn btn-outline-light btn-sm">
-      {% trans "Export CSV" %}
-    </button>
-  </h5>
-
-  <table id="scenarioTable" class="table table-dark table-striped">
-    <thead>
-      <tr>
-        <th>{% trans "Scenario" %}</th>
-        <th>{% trans "Total" %}</th>
-        <th>{% trans "Clicks" %}</th>
-        <th>{% trans "Reports" %}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for r in per_scenario %}
-        <tr>
-          <td>{{ r.scenario__title }}</td>
-          <td>{{ r.total }}</td>
-          <td>{{ r.clicks|default:0 }}</td>
-          <td>{{ r.reports|default:0 }}</td>
-        </tr>
-      {% empty %}
-        <tr><td colspan="4">{% trans "No data yet." %}</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endblock %}
-
-{% block extra_js %}
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" crossorigin="anonymous"></script>
-  <script>
-    // ==== Data from context ====
-    const labels  = [{% for r in per_scenario %}"{{ r.scenario__title|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
-    const totals  = [{% for r in per_scenario %}{{ r.total|default:0 }}{% if not forloop.last %}, {% endif %}{% endfor %}];
-    const clicks  = [{% for r in per_scenario %}{{ r.clicks|default:0 }}{% if not forloop.last %}, {% endif %}{% endfor %}];
-    const reports = [{% for r in per_scenario %}{{ r.reports|default:0 }}{% if not forloop.last %}, {% endif %}{% endfor %}];
-
-    const totalAttempts = {{ mine.total|default:0 }};
-    const totalCorrect  = {{ mine.reports|default:0 }};
-    const totalWrong    = Math.max(0, totalAttempts - totalCorrect + {{ mine.clicks|default:0 }});
-
-    // ==== Bar chart ====
-    new Chart(document.getElementById('byScenarioChart').getContext('2d'), {
-      type: 'bar',
+  if (categories.length === 0) {
+    document.querySelector(".bg-dark").innerHTML = `
+      <p class="text-center text-muted mt-4">No data available yet for comparison.</p>`;
+  } else {
+    const ctx = document.getElementById("compareChart");
+    new Chart(ctx, {
+      type: "bar",
       data: {
-        labels,
+        labels: categories,
         datasets: [
-          { label: "{% trans 'Total' %}",   data: totals },
-          { label: "{% trans 'Clicks' %}",  data: clicks },
-          { label: "{% trans 'Reports' %}", data: reports }
+          {
+            label: "First Scenario Awareness",
+            data: firstAwareness,
+            backgroundColor: "#60a5fa"
+          },
+          {
+            label: "Second Scenario Awareness",
+            data: secondAwareness,
+            backgroundColor: "#4ade80"
+          }
         ]
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
-        scales: { y: { beginAtZero: true } },
-        plugins: { legend: { position: 'top' }, tooltip: { mode: 'index', intersect: false } }
+        plugins: {
+          title: {
+            display: true,
+            text: "Awareness Levels per Category (First vs Second Scenario)",
+            color: "#fff"
+          },
+          legend: {
+            labels: { color: "#ddd" }
+          }
+        },
+        scales: {
+          x: { ticks: { color: "#aaa" } },
+          y: { beginAtZero: true, max: 5, ticks: { color: "#aaa" } }
+        }
       }
     });
+  }
+</script>
 
-    // ==== Doughnut chart ====
-    new Chart(document.getElementById('distributionChart').getContext('2d'), {
-      type: 'doughnut',
-      data: {
-        labels: ["{% trans 'Correct' %}", "{% trans 'Wrong' %}"],
-        datasets: [{ data: [totalCorrect, totalWrong] }]
-      },
-      options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    // ==== Export CSV from table ====
-    document.getElementById('exportCsvBtn')?.addEventListener('click', () => {
-      const table = document.getElementById('scenarioTable');
-      const rows = [...table.querySelectorAll('tr')].map(tr =>
-        [...tr.querySelectorAll('th,td')].map(td => '"' + td.innerText.replace(/"/g,'""') + '"').join(',')
-      ).join('\n');
-      const blob = new Blob([rows], { type: 'text/csv;charset=utf-8;' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'report-{{ request.LANGUAGE_CODE|default:"en" }}.csv';
-      a.click();
-    });
-  </script>
 {% endblock %}

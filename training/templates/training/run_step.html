@@ -2,12 +2,14 @@
 {% block content %}
 
 <div class="container py-5 text-center">
-  <h3 class="text-purple-400 mb-4">Step {{ step_index }} of {{ total_steps }}</h3>
+<h3 class="text-center text-purple-300 font-semibold mb-4" style="color:#c8a2c8;">
+      {{ step.title }}
+</h3>
 
   <div id="timer" class="mb-3 text-warning" style="font-size: 1.2rem;"></div>
 
-  <div class="card p-4 bg-dark border rounded-3 mx-auto" style="max-width: 600px;">
-    <p>{{ rendered_body|safe }}</p>
+  <div class="card p-4 bg-dark border rounded-3 mx-auto" style="max-width: 1000px;line-height:1.0;color:white;">
+    <pre> {{ rendered_body|safe }}</pre>
 
     <!-- ✅ New buttons (Back takes you directly to the final page) -->
     <form method="post" action="{% url 'training:run_action' run_uuid=run.run_uuid %}">
@@ -17,25 +19,27 @@
       <div class="mt-4 d-flex justify-content-between">
 
         <!-- Back button -->
-        <button type="submit" name="action" value="back"
-          class="btn btn-outline-light"
-          style="border-color:#a855f7; color:#a855f7; transition:all 0.3s ease;"
-          onmouseover="this.style.backgroundColor='#a855f7'; this.style.color='#fff';"
-          onmouseout="this.style.backgroundColor='transparent'; this.style.color='#a855f7';">
-           Back
-        </button>
+        <button id="back-btn" type="submit" name="action" value="back"
+         class="btn btn-outline-light"
+         style="border-color:#a855f7; color:#a855f7; transition:all 0.3s ease;"
+         onmouseover="this.style.backgroundColor='#a855f7'; this.style.color='#fff';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='#a855f7';">
+         Back
+       </button>
 
         <!-- Next button -->
         {% if next_step %}
-        <button type="submit" name="action" value="next"
-          class="btn"
-          style="background-color:#d8b4fe; color:#000; font-weight:600;
-                 border:none; border-radius:6px; padding:8px 20px;
-                 transition:all 0.3s ease;"
-          onmouseover="this.style.backgroundColor='#e9d5ff'; this.style.transform='scale(1.05)';"
-          onmouseout="this.style.backgroundColor='#d8b4fe'; this.style.transform='scale(1)';">
-          Next 
-        </button>
+        <button id="next-btn" type="submit" name="action" value="next"
+         class="btn"
+         style="background-color:#d8b4fe; color:#000; font-weight:600;
+             border:none; border-radius:6px; padding:8px 20px;
+             transition:all 0.3s ease;"
+         onmouseover="this.style.backgroundColor='#e9d5ff'; this.style.transform='scale(1.05)';"
+         onmouseout="this.style.backgroundColor='#d8b4fe'; this.style.transform='scale(1)';">
+         Next
+       </button>
+
+	
         {% else %}
         <a href="{% url 'training:run_summary' run_uuid %}" class="btn btn-success">Finish</a>
         {% endif %}
@@ -83,6 +87,46 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   tick();
+
+
+function sendLog(action, step, score) {
+    fetch("/log_action/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({
+            scenario_id: "{{ scenario.id }}",
+            run_uuid: "{{ run_uuid }}",
+            step: step,
+            action: action,
+            score: score
+        })
+    }).then(response => {
+        // اختياري: تتبع النتيجة
+        console.log("Logged:", action, step, score);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const nextBtn = document.getElementById("next-btn");
+    const backBtn = document.getElementById("back-btn");
+
+    if (nextBtn) {
+        nextBtn.addEventListener("click", function () {
+            sendLog("next", {{ step.step_number }}, {{ request.session.current_score|default:0 }});
+        });
+    }
+
+    if (backBtn) {
+        backBtn.addEventListener("click", function () {
+            sendLog("back", {{ step.step_number }}, {{ request.session.current_score|default:0 }});
+        });
+    }
+});
+
+
 });
 </script>
 {% endif %}

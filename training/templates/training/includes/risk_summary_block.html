@@ -1,0 +1,19 @@
+{% comment %}  Hazard Awareness Details Component {% endcomment %}
+
+{% if "financial" in risk_type|lower %}
+  {% with icon="🟠" %}
+    {% include "training/includes/risk_summary_inner.html" %}
+  {% endwith %}
+{% elif "credential" in risk_type|lower or "data" in risk_type|lower %}
+  {% with icon="🔴" %}
+    {% include "training/includes/risk_summary_inner.html" %}
+  {% endwith %}
+{% elif "system" in risk_type|lower or "api" in risk_type|lower %}
+  {% with icon="🟣" %}
+    {% include "training/includes/risk_summary_inner.html" %}
+  {% endwith %}
+{% else %}
+  {% with icon="🟢" %}
+    {% include "training/includes/risk_summary_inner.html" %}
+  {% endwith %}
+{% endif %}
