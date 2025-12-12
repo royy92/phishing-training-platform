@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Scenario, UserResponse, Category
+from .models import ScenarioStep
 
 @admin.register(Scenario)
 class ScenarioAdmin(admin.ModelAdmin):
@@ -22,6 +23,13 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ("name",)
 
 
+@admin.register(ScenarioStep)
+class ScenarioStepAdmin(admin.ModelAdmin):
+    verbose_name = "Scenario Step"
+    verbose_name_plural = "Scenario Steps"
+    list_display = ("scenario", "order", "step_type", "title")
+    list_filter = ("scenario", "step_type")
+    search_fields = ("title", "body")
 
 
 
