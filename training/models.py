@@ -1,15 +1,17 @@
 import re
+import uuid
+import json
+
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.utils.text import slugify
-from django.template import engines, Template, Context, loader
+from django.template import engines
 from django.utils.html import mark_safe
 from django.utils import timezone
-import uuid
-import json
+
 
 # =======================
 # Step model
@@ -74,39 +76,47 @@ class Scenario(models.Model):
         INTERMEDIATE = 'intermediate', _('Intermediate')
         ADVANCED = 'advanced', _('Advanced')
 
-    # 🔹 العلاقة مع جدول التصنيفات (Category)
     category = models.ForeignKey(
-        "Category",                    # استخدم اسم الموديل كـ string
+        "Category",
         on_delete=models.CASCADE,
         related_name="scenarios",
         null=True,
         blank=True
     )
 
-    # 🔹 المعلومات الأساسية للسيناريو
     title = models.CharField(max_length=200)
     message = models.TextField()
     content = models.TextField(blank=True, null=True)
     is_phishing = models.BooleanField(default=True)
 
-    # 🔹 مستوى الصعوبة
     difficulty = models.CharField(
         max_length=20,
         choices=Difficulty.choices,
         default=Difficulty.BEGINNER
     )
 
-    # 🔹 عمق الخطوات داخل السيناريو
     depth = models.PositiveIntegerField(default=5)
 
-    # 🔹 معلومات الإنشاء والتحديث
+    PHASE_CHOICES = (
+        (1, "First (Baseline)"),
+        (2, "Second (Follow-up)"),
+    )
+    # ✅ مهم للتقرير: phase + index
+    phase = models.PositiveSmallIntegerField(default=1, choices=PHASE_CHOICES, db_index=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # 🔹 تمثيل النص عند الطباعة أو العرض
+    class Meta:
+        # ✅ مهم للتقرير: تسريع اختيار أول/ثاني سيناريو لكل Category
+        indexes = [
+            models.Index(fields=["category", "phase"]),
+        ]
+
     def __str__(self):
         category_name = getattr(self.category, "name", "Uncategorized")
         return f"{self.title} ({category_name})"
+
 
 # =======================
 # ScenarioStep model
@@ -138,6 +148,8 @@ class ScenarioStep(models.Model):
         ordering = ['order']
         indexes = [
             models.Index(fields=['scenario']),
+            models.Index(fields=['scenario', 'order']),   # ✅ تسريع جلب step الحالي/التالي
+            models.Index(fields=['link_slug']),          # ✅ تسريع track_link إذا بتفلتر عليها
         ]
         constraints = [
             models.UniqueConstraint(fields=['scenario', 'order'], name='uniq_scenario_order')
@@ -150,17 +162,14 @@ class ScenarioStep(models.Model):
 class ScenarioLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     scenario = models.ForeignKey('Scenario', on_delete=models.CASCADE)
-    run_uuid = models.CharField(max_length=64)  # ← NEW!
+    run_uuid = models.CharField(max_length=64)
     step = models.IntegerField(default=0)
-    action = models.CharField(max_length=20)  # next / back / finish
+    action = models.CharField(max_length=20)
     score = models.IntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user} - {self.scenario.title} - {self.action}"
-
-
-
 
 
 # =======================
@@ -172,14 +181,25 @@ class UserScenarioRun(models.Model):
     run_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     started_at = models.DateTimeField(auto_now_add=True)
     finished_at = models.DateTimeField(null=True, blank=True)
+
     next_remaining = models.IntegerField(default=0)
     back_count = models.IntegerField(default=0)
     next_count = models.IntegerField(default=0)
+
     depth_max = models.IntegerField(default=0)
     step_index = models.IntegerField(default=1)
     score = models.IntegerField(default=0)
+
     context = models.JSONField(default=dict)
     last_risk_type = models.CharField(max_length=100, null=True, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "scenario"]),
+            models.Index(fields=["scenario", "finished_at"]),
+            models.Index(fields=["finished_at"]),
+            models.Index(fields=["started_at"]),
+        ]
 
     def __str__(self):
         return f"{self.user} - {self.scenario}"
@@ -204,6 +224,12 @@ class UserAction(models.Model):
     payload = models.JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["run", "action"]),
+            models.Index(fields=["action", "created_at"]),
+        ]
+
     @staticmethod
     def apply_scoring(action: str, step_type: str, payload: dict) -> int:
         if action == 'report':
@@ -227,10 +253,11 @@ class UserAction(models.Model):
 TRACK_TAG_RE = re.compile(r"{%\s*url\s+'training:track_link'\s+[^%]*%}")
 SLUG_RE = re.compile(r"link_slug\s*=\s*'([^']+)'|link_slug\s*=\s*\"([^\"]+)\"")
 
+
 def render_step_body(step, run, request) -> str:
     html = step.body or ""
 
-    # 1) حاول render عادي (لو زبط ممتاز)
+    # 1) حاول render عادي
     try:
         ctx = (run.context or {}).copy()
         ctx.update({"run": run, "step": step})
@@ -240,7 +267,7 @@ def render_step_body(step, run, request) -> str:
     except Exception as e:
         print(f"[render_step_body] Template render failed for step {step.id}: {e}")
 
-    # 2) ضمان: استبدال {% url training:track_link ... %} برابط فعلي حتى لو فشل الرندر
+    # 2) fallback: استبدال track_link tag برابط فعلي
     def _replace_track_tag(match):
         tag = match.group(0)
         m = SLUG_RE.search(tag)
@@ -259,13 +286,14 @@ def render_step_body(step, run, request) -> str:
     html = TRACK_TAG_RE.sub(_replace_track_tag, html)
     return mark_safe(html)
 
+
 class UserResponse(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
     scenario = models.ForeignKey(
-        'training.Scenario', 
+        'training.Scenario',
         on_delete=models.CASCADE
     )
     clicked = models.BooleanField(default=False)

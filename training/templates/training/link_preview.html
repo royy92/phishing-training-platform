@@ -1,0 +1,297 @@
+{% extends "training/base.html" %}
+{% block content %}
+
+<style>
+  /* نخلي النصوص الرمادية على الخلفية الداكنة واضحة بدون ما نخرب الثيم */
+  .soft-white{ color: rgba(255,255,255,.92) !important; }
+  .soft-muted{ color: rgba(255,255,255,.72) !important; }
+
+  /* زر البنفسجي الموحد (نفس اللي فوق) */
+  .btn-brand{
+    background:#cba6f7 !important;
+    color:#000 !important;
+    border:none !important;
+    font-weight:600 !important;
+  }
+  .btn-brand:hover{ background:#e9d5ff !important; }
+
+  /* نخلي links داخل المحاكاة واضحة */
+  .sim-link{
+    color:#89dceb !important;
+    text-decoration: underline !important;
+    font-weight:600 !important;
+  }
+</style>
+
+<div class="container py-5">
+  <div class="card bg-dark text-light border rounded-3 shadow-lg mx-auto" style="max-width: 920px;">
+    <div class="card-body p-4">
+
+      <!-- Header -->
+      <h2 class="mb-1" style="color:#cba6f7;">{{ title }}</h2>
+      <p class="soft-white mb-4">{{ subtitle }}</p>
+
+      <!-- Displayed URL (واضح) -->
+      <div class="p-3 rounded-3 mb-4" style="background:#1f232a; border:1px solid #2b2f36;">
+        <div class="small soft-muted mb-1">Displayed URL:</div>
+        <div class="fw-semibold text-info">{{ displayed_url }}</div>
+      </div>
+      {% if link_slug == "revoke-session" %}
+
+        <div class="soft-white mb-3">
+          Review recent account activity and manage sessions.
+        </div>
+
+        <div class="p-3 rounded-3 mb-3" style="background:#151a20; border:1px solid #2b2f36;">
+          <div class="fw-semibold soft-white mb-3">New API session detected</div>
+
+          {% if items %}
+            <div class="row g-2">
+              {% for k,v in items %}
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                    <span class="soft-muted">{{ k }}</span>
+                    <span class="soft-white">{{ v }}</span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="row g-2">
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                  <span class="soft-muted">App</span><span class="soft-white">Cloud API Gateway</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                  <span class="soft-muted">IP</span><span class="soft-white">185.73.22.14</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                  <span class="soft-muted">Approx. location</span><span class="soft-white">Istanbul, TR</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                  <span class="soft-muted">Device</span><span class="soft-white">Linux (Firefox)</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                  <span class="soft-muted">Time</span><span class="soft-white">Just now</span>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        <p class="small soft-white mt-3 mb-4">
+          🛈 For account changes, you may also open the Security Portal from your saved bookmark.
+        </p>
+
+        <!-- أزرار شكلها واقعي بس ما بتنهي ولا تغير الستيب -->
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <button type="button" class="btn btn-primary" onclick="simMsg('Session revoked (simulated).');">
+            Revoke this session
+          </button>
+          <button type="button" class="btn btn-outline-light" onclick="simMsg('Thanks — your report was noted (simulated).');">
+            This wasn’t me
+          </button>
+          <button type="button" class="btn btn-link soft-muted" onclick="simMsg('No changes made (simulated).');">
+            Keep session
+          </button>
+        </div>
+
+      {% elif link_slug == "security-dashboard-login" %}
+
+        <div class="p-3 rounded" style="background:#151a1f; border:1px solid rgba(255,255,255,.08);">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h4 class="mb-1" style="color:#cba6f7;">Security Dashboard Login</h4>
+
+              <div class="small soft-white">
+                Displayed URL:
+                <span class="text-info fw-semibold">{{ displayed_url }}</span>
+              </div>
+            </div>
+
+            <span class="badge bg-secondary bg-opacity-25 text-light border border-secondary">
+              Secure Access
+            </span>
+          </div>
+
+          <div class="mb-3">
+            <p class="soft-white mb-2">
+              Sign in to review the newly detected session and confirm whether it should remain active.
+            </p>
+            <ul class="small soft-white mb-0">
+              <li>Authentication method: Corporate SSO + MFA</li>
+              <li>Session review: IP/location, device, and access time</li>
+              <li>Action required: Confirm access or revoke session</li>
+            </ul>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-7">
+              <div class="p-3 rounded" style="background:#0f1318; border:1px solid rgba(255,255,255,.06);">
+                <label class="form-label soft-white small">Work Email</label>
+                <input class="form-control bg-dark text-light border-secondary" placeholder="name@company.com" />
+
+                <label class="form-label soft-white small mt-3">Password</label>
+                <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="••••••••••" />
+
+                <label class="form-label soft-white small mt-3">MFA Code</label>
+                <input class="form-control bg-dark text-light border-secondary" placeholder="123 456" />
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberDevice">
+                    <label class="form-check-label soft-white small" for="rememberDevice">
+                      Remember this device for 7 days
+                    </label>
+                  </div>
+                  <a href="#" class="small text-info text-decoration-none">Forgot password?</a>
+                </div>
+
+                <button type="button" class="btn btn-primary w-100 mt-3 btn-brand">
+                  Sign in
+                </button>
+
+                <div class="small soft-white mt-2">
+                  By signing in, you agree to the Access Policy and Acceptable Use Guidelines.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-5">
+              <div class="p-3 rounded h-100" style="background:#0f1318; border:1px solid rgba(255,255,255,.06);">
+                <div class="soft-white fw-semibold mb-2">Session Details</div>
+                <div class="small soft-white mb-2">Latest access attempt summary:</div>
+
+                <div class="small soft-white">
+                  <div class="d-flex justify-content-between">
+                    <span class="soft-muted">Device</span><span class="soft-white">Browser (Desktop)</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="soft-muted">Location</span><span class="soft-white">Auto-detected</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="soft-muted">IP</span><span class="soft-white">Hidden until sign-in</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="soft-muted">Time</span><span class="soft-white">Recent</span>
+                  </div>
+                </div>
+
+                <hr class="border-secondary my-3"/>
+
+                <div class="small soft-white">
+                  Tip: Most security portals can be accessed from your internal dashboard or saved bookmark.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+     
+      {% else %}
+
+        <div class="p-3 rounded-3 mb-3" style="background:#151a20; border:1px solid #2b2f36;">
+          <div class="fw-semibold soft-white mb-3">{{ card_title }}</div>
+
+          {% if items %}
+            <div class="row g-2">
+              {% for k,v in items %}
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                    <span class="soft-muted">{{ k }}</span>
+                    <span class="soft-white">{{ v }}</span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="soft-white mb-0">No extra details.</p>
+          {% endif %}
+        </div>
+
+        {% if hint %}
+          <p class="small soft-white mt-3 mb-4">🛈 {{ hint }}</p>
+        {% endif %}
+
+      {% endif %}
+
+      <!-- Footer buttons (موحدين) -->
+      <div class="d-flex gap-2 mt-4">
+        <a class="btn btn-outline-light"
+           href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+          Back to Scenario
+        </a>
+        <button type="button" class="btn btn-brand"
+                onclick="window.close();">
+          Close Tab
+        </button>
+      </div>
+
+      <div id="sim-msg" class="mt-3 text-success small" style="display:none;"></div>
+
+    </div>
+  </div>
+</div>
+{% if link_slug == "cloud-access-console" %}
+  <div class="p-3 rounded-3 mb-4" style="background:#0f1318; border:1px solid rgba(255,255,255,.06);">
+    <div class="d-flex justify-content-between align-items-start mb-2">
+      <div class="fw-semibold text-light">Corporate Cloud SSO</div>
+      <span class="badge bg-secondary bg-opacity-25 text-light border border-secondary">MFA Required</span>
+    </div>
+
+    <p class="text-secondary small mb-3">
+      Sign in to continue to the Cloud Access Console and confirm whether this access should remain active.
+    </p>
+
+    <label class="form-label text-secondary small">Work Email</label>
+    <input class="form-control bg-dark text-light border-secondary" placeholder="name@company.com" />
+
+    <label class="form-label text-secondary small mt-3">Password</label>
+    <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="••••••••••" />
+
+    <label class="form-label text-secondary small mt-3">MFA Code</label>
+    <input class="form-control bg-dark text-light border-secondary" placeholder="123 456" />
+
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="rememberCloud">
+        <label class="form-check-label text-secondary small" for="rememberCloud">
+          Remember this device for 7 days
+        </label>
+      </div>
+      <a href="#" class="small text-info text-decoration-none" onclick="event.preventDefault(); simMsg('Password recovery page (simulated).');">
+        Forgot password?
+      </a>
+    </div>
+
+    <button type="button"
+            class="btn btn-primary w-100 mt-3"
+            style="background:#cba6f7;border:none;color:#111;"
+            onclick="simMsg('Authentication request received (simulated).');">
+      Continue
+    </button>
+
+    <div class="small text-secondary mt-2">
+      By continuing, you agree to the Cloud Access Policy and Acceptable Use Guidelines.
+    </div>
+  </div>
+{% endif %}
+
+<script>
+  function simMsg(text){
+    const el = document.getElementById("sim-msg");
+    el.textContent = text;
+    el.style.display = "block";
+    setTimeout(() => { el.style.display = "none"; }, 2500);
+  }
+</script>
+
+{% endblock %}

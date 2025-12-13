@@ -18,10 +18,19 @@ urlpatterns = [
     path("report/", views.report_view, name="report"),
     path("log_action/", views.log_action, name="log_action"),
 
-
     path("track/<uuid:run_uuid>/<int:step_id>/<slug:link_slug>/", views.track_link, name="track_link"),
-    path("report/", views.report, name="report"),
+
     path("run/<uuid:run_uuid>/details/", views.view_risk_details, name="view_risk_details"),
 
     path("report/export.csv", views.reports_csv, name="reports_csv"),
+    path(
+        "track/<uuid:run_uuid>/<int:step_id>/<slug:link_slug>/",
+        views.track_link,
+        name="track_link",
+    ),
+    path(
+        "run/<uuid:run_uuid>/step/<int:step_id>/link-preview/<slug:link_slug>/",
+        views.link_preview,
+        name="link_preview",
+    ),
 ]

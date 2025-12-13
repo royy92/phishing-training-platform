@@ -1,0 +1,25 @@
+{% extends "training/base.html" %}
+{% block content %}
+<div class="container py-5 text-light">
+  <div class="card bg-dark border rounded-3 p-4 mx-auto" style="max-width: 720px;">
+    <h3 class="mb-3" style="color:#cba6f7;">{{ title }}</h3>
+
+    <p class="mb-2">
+      <strong>URL:</strong> <span class="text-info">{{ fake_domain }}</span>
+    </p>
+
+    <p class="text-light">{{ message }}</p>
+
+    <hr class="border-secondary">
+
+    <p class="text-muted mb-3">
+      ✅ This is a simulated page. You can close this tab and continue the scenario using Next/Back.
+    </p>
+
+    <a class="btn btn-outline-light"
+       href="{% url 'training:run_step' run_uuid=run.run_uuid index=step.order %}">
+      Return to Scenario Step
+    </a>
+  </div>
+</div>
+{% endblock %}

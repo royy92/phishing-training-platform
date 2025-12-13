@@ -19,8 +19,8 @@
       You have completed the scenario: <strong>{{ run.scenario.title }}</strong>.
     </p>
 
-    {% if run.finished_at and run.step_index < run.scenario.steps.count %}
-      <p class="text-warning fw-semibold">⚠ The simulation was ended early (via the Back button).</p>
+    {% if run.depth_max < steps_done %}
+      <p class="text-warning fw-semibold">⚠ The simulation was ended early.</p>
     {% else %}
       <p class="text-success fw-semibold">✅ You’ve successfully finished all {{ steps_done }} steps!</p>
     {% endif %}
@@ -34,7 +34,7 @@
 
     <!-- 🧠 Awareness Message -->
     {% if attack_title and attack_message %}
-      <div class="alert mt-4 text-start border-0 fade-in" 
+      <div class="alert mt-4 text-start border-0 fade-in"
            style="background-color:#2b2735; color:#fff; border-left:5px solid #cba6f7;">
         <h5 class="fw-bold mb-2 text-danger">{{ attack_icon }} {{ attack_title }}</h5>
         <p class="mb-2">{{ attack_message }}</p>
@@ -43,7 +43,6 @@
         {% endif %}
       </div>
     {% endif %}
-
 
     <!-- 🔹 Footer Buttons -->
     <div class="mt-5">

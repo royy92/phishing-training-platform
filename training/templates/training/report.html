@@ -5,10 +5,10 @@
 
   <h2 class="text-center mb-5 text-info fw-bold">📊 Awareness Comparison by Category</h2>
 
-  <!-- 🟦 Awareness Bar - First Scenario -->
+  <!-- Overall bars -->
   <div class="mb-4">
-    <h5 class="text-light mb-2 fw-semibold">First Scenario Awareness Level</h5>
-    <div class="progress" style="height: 25px; border-radius: 12px; background-color: #2a2a2a;">
+    <h5 class="text-light mb-2 fw-semibold">Overall Awareness (First Scenario)</h5>
+    <div class="progress" style="height: 22px; border-radius: 12px; background-color: #2a2a2a;">
       <div class="progress-bar bg-primary fw-bold"
            role="progressbar"
            style="width: {{ first_awareness }}%; transition: width 1s ease-in-out;"
@@ -18,45 +18,9 @@
     </div>
   </div>
 
-  <!-- 🔹 First Scenario Section -->
-  <h4 class="text-primary mb-3 fw-semibold">🧩 First Scenario per Category</h4>
-  <div class="table-responsive mb-5">
-    <table class="table table-dark table-striped table-bordered text-center align-middle">
-      <thead class="table-secondary text-dark">
-        <tr>
-          <th>Category</th>
-          <th>Scenario</th>
-          <th>Score</th>
-          <th>Backs</th>
-          <th>Nexts</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for s in first_data %}
-        <tr>
-          <td>{{ s.category }}</td>
-          <td>{{ s.scenario }}</td>
-          <td class="{% if s.score >= 4 %}text-success{% elif s.score >= 2 %}text-warning{% else %}text-danger{% endif %}">
-            {{ s.score }}
-          </td>
-          <td>{{ s.backs }}</td>
-          <td>{{ s.nexts }}</td>
-          <td>{{ s.date }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="6" class="text-muted text-center">No data for first scenarios.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 🟩 Awareness Bar - Second Scenario -->
-  <div class="mb-4">
-    <h5 class="text-light mb-2 fw-semibold">Second Scenario Awareness Level</h5>
-    <div class="progress" style="height: 25px; border-radius: 12px; background-color: #2a2a2a;">
+  <div class="mb-5">
+    <h5 class="text-light mb-2 fw-semibold">Overall Awareness (Second Scenario)</h5>
+    <div class="progress" style="height: 22px; border-radius: 12px; background-color: #2a2a2a;">
       <div class="progress-bar bg-success fw-bold"
            role="progressbar"
            style="width: {{ second_awareness }}%; transition: width 1s ease-in-out;"
@@ -66,7 +30,48 @@
     </div>
   </div>
 
-  <!-- 🔹 Second Scenario Section -->
+  <!-- TABLE 1 -->
+  <h4 class="text-primary mb-3 fw-semibold">🧩 First Scenario per Category</h4>
+  <div class="table-responsive mb-5">
+    <table class="table table-dark table-striped table-bordered text-center align-middle">
+      <thead class="table-secondary text-dark">
+        <tr>
+          <th>Category</th>
+          <th>Scenario</th>
+          <th>Participants</th>
+          <th>Runs</th>
+          <th>Avg Score</th>
+          <th>Awareness %</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in phase1_rows %}
+        <tr>
+          <td>{{ s.category }}</td>
+          <td>{{ s.scenario }}</td>
+          <td>{{ s.participants }}</td>
+          <td>{{ s.runs }}</td>
+          <td>{{ s.avg_score }}</td>
+          <td class="{% if s.awareness_pct >= 80 %}text-success{% elif s.awareness_pct >= 50 %}text-warning{% else %}text-danger{% endif %}">
+            {{ s.awareness_pct }}%
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-muted text-center">No data for first scenarios yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Chart 1 -->
+  <h4 class="text-info mb-3 fw-semibold">📈 First Scenario Awareness Chart</h4>
+  <div class="bg-dark p-4 rounded shadow mb-5">
+    <canvas id="chartFirst"></canvas>
+  </div>
+
+  <!-- TABLE 2 -->
   <h4 class="text-success mb-3 fw-semibold">🧩 Second Scenario per Category</h4>
   <div class="table-responsive mb-5">
     <table class="table table-dark table-striped table-bordered text-center align-middle">
@@ -74,88 +79,96 @@
         <tr>
           <th>Category</th>
           <th>Scenario</th>
-          <th>Score</th>
-          <th>Backs</th>
-          <th>Nexts</th>
-          <th>Date</th>
+          <th>Participants</th>
+          <th>Runs</th>
+          <th>Avg Score</th>
+          <th>Awareness %</th>
         </tr>
       </thead>
       <tbody>
-        {% for s in second_data %}
+        {% for s in phase2_rows %}
         <tr>
           <td>{{ s.category }}</td>
           <td>{{ s.scenario }}</td>
-          <td class="{% if s.score >= 4 %}text-success{% elif s.score >= 2 %}text-warning{% else %}text-danger{% endif %}">
-            {{ s.score }}
+          <td>{{ s.participants }}</td>
+          <td>{{ s.runs }}</td>
+          <td>{{ s.avg_score }}</td>
+          <td class="{% if s.awareness_pct >= 80 %}text-success{% elif s.awareness_pct >= 50 %}text-warning{% else %}text-danger{% endif %}">
+            {{ s.awareness_pct }}%
           </td>
-          <td>{{ s.backs }}</td>
-          <td>{{ s.nexts }}</td>
-          <td>{{ s.date }}</td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="6" class="text-muted text-center">No data for second scenarios.</td>
+          <td colspan="6" class="text-muted text-center">No data for second scenarios yet.</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 
-  <!-- 🔹 Comparison Chart -->
-  <h4 class="text-info mb-4 fw-semibold">📈 Comparison Chart (First vs Second Scenario)</h4>
+  <!-- Chart 2 -->
+  <h4 class="text-info mb-3 fw-semibold">📈 Second Scenario Awareness Chart</h4>
   <div class="bg-dark p-4 rounded shadow">
-    <canvas id="compareChart"></canvas>
+    <canvas id="chartSecond"></canvas>
   </div>
+
 </div>
 
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  const categories = JSON.parse('{{ chart_categories|safe|escapejs }}');
-  const firstAwareness = JSON.parse('{{ chart_first_awareness|safe|escapejs }}');
-  const secondAwareness = JSON.parse('{{ chart_second_awareness|safe|escapejs }}');
+  const chart1Labels = JSON.parse('{{ chart1_labels|safe|escapejs }}');
+  const chart1Values = JSON.parse('{{ chart1_values|safe|escapejs }}');
 
-  if (categories.length === 0) {
-    document.querySelector(".bg-dark").innerHTML = `
-      <p class="text-center text-muted mt-4">No data available yet for comparison.</p>`;
-  } else {
-    const ctx = document.getElementById("compareChart");
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: categories,
-        datasets: [
-          {
-            label: "First Scenario Awareness",
-            data: firstAwareness,
-            backgroundColor: "#60a5fa"
-          },
-          {
-            label: "Second Scenario Awareness",
-            data: secondAwareness,
-            backgroundColor: "#4ade80"
-          }
-        ]
+  const chart2Labels = JSON.parse('{{ chart2_labels|safe|escapejs }}');
+  const chart2Values = JSON.parse('{{ chart2_values|safe|escapejs }}');
+
+  // Chart 1
+  const ctx1 = document.getElementById("chartFirst");
+  new Chart(ctx1, {
+    type: "bar",
+    data: {
+      labels: chart1Labels,
+      datasets: [{
+        label: "First Scenario Awareness (%)",
+        data: chart1Values
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: "#ddd" } },
+        title: { display: true, text: "First Scenario Awareness per Category (%)", color: "#fff" }
       },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: "Awareness Levels per Category (First vs Second Scenario)",
-            color: "#fff"
-          },
-          legend: {
-            labels: { color: "#ddd" }
-          }
-        },
-        scales: {
-          x: { ticks: { color: "#aaa" } },
-          y: { beginAtZero: true, max: 5, ticks: { color: "#aaa" } }
-        }
+      scales: {
+        x: { ticks: { color: "#aaa" } },
+        y: { beginAtZero: true, max: 100, ticks: { color: "#aaa" } }
       }
-    });
-  }
+    }
+  });
+
+  // Chart 2
+  const ctx2 = document.getElementById("chartSecond");
+  new Chart(ctx2, {
+    type: "bar",
+    data: {
+      labels: chart2Labels,
+      datasets: [{
+        label: "Second Scenario Awareness (%)",
+        data: chart2Values
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: "#ddd" } },
+        title: { display: true, text: "Second Scenario Awareness per Category (%)", color: "#fff" }
+      },
+      scales: {
+        x: { ticks: { color: "#aaa" } },
+        y: { beginAtZero: true, max: 100, ticks: { color: "#aaa" } }
+      }
+    }
+  });
 </script>
 
 {% endblock %}

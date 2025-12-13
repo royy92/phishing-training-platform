@@ -9,7 +9,7 @@
   <div id="timer" class="mb-3 text-warning" style="font-size: 1.2rem;"></div>
 
   <div class="card p-4 bg-dark border rounded-3 mx-auto" style="max-width: 1000px;line-height:1.0;color:white;">
-    <pre> {{ rendered_body|safe }}</pre>
+    <div> {{ rendered_body|safe }}</div>
 
     <!-- ✅ New buttons (Back takes you directly to the final page) -->
     <form method="post" action="{% url 'training:run_action' run_uuid=run.run_uuid %}">

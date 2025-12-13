@@ -4,9 +4,9 @@ from .models import ScenarioStep
 
 @admin.register(Scenario)
 class ScenarioAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'message', 'category', 'difficulty', 'is_phishing')
-    list_filter = ('category', 'difficulty', 'is_phishing')
-    search_fields = ("title", "summary", "content")
+    list_display = ('id', 'title', 'category', 'phase', 'difficulty', 'is_phishing')
+    list_filter = ('category', 'phase', 'difficulty', 'is_phishing')
+    search_fields = ("title", "message", "content")
 
 
 @admin.register(UserResponse)
