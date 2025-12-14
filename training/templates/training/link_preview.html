@@ -20,7 +20,7 @@
     color:#89dceb !important;
     text-decoration: underline !important;
     font-weight:600 !important;
-  }
+  } 
 </style>
 
 <div class="container py-5">
@@ -29,6 +29,7 @@
 
       <!-- Header -->
       <h2 class="mb-1" style="color:#cba6f7;">{{ title }}</h2>
+      <div class="small text-muted">Debug slug: {{ link_slug }}</div>
       <p class="soft-white mb-4">{{ subtitle }}</p>
 
       <!-- Displayed URL (واضح) -->
@@ -281,6 +282,40 @@
 
     <div class="small text-secondary mt-2">
       By continuing, you agree to the Cloud Access Policy and Acceptable Use Guidelines.
+    </div>
+  </div>
+{% endif %}
+{% if link_slug == "password-reset-verify" %}
+  <div class="p-3 rounded-3 mb-4" style="background:#0f1318; border:1px solid rgba(255,255,255,.06);">
+    <div class="row g-3">
+      <div class="col-md-6" style="opacity:.8;">
+        <label class="form-label text-light small">Current Password</label>
+        <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="••••••••••" />
+      </div>
+      <div class="col-md-6" style="opacity:.8;">
+        <label class="form-label text-light small">New Password</label>
+        <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="Create a new password" />
+      </div>
+
+      <div class="col-md-6" style="opacity:.8;">
+        <label class="form-label text-light small">Confirm New Password</label>
+        <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="Repeat new password" />
+      </div>
+      <div class="col-md-6" style="opacity:.8;">
+        <label class="form-label text-light small">Verification Code (optional)</label>
+        <input class="form-control bg-dark text-light border-secondary" placeholder="123 456" />
+      </div>
+    </div>
+
+    <button type="button"
+            class="btn btn-primary w-100 mt-3"
+            style="background:#cba6f7;border:none;color:#111;"
+            onclick="simMsg('Verification completed (simulated).');">
+      Verify & Continue
+    </button>
+
+    <div class="small text-muted mt-2" style="opacity:.8;">
+      By continuing, you confirm this password change request.
     </div>
   </div>
 {% endif %}

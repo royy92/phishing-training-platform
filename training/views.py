@@ -757,6 +757,23 @@ def link_preview(request, run_uuid, step_id, link_slug):
            "display_url": "portal-scholarships.univ.example",
        }
 
+    elif link_slug == "password-reset-verify":
+       context = {
+           "title": "Password Reset Verification",
+           "subtitle": "Complete a secure verification step to continue the password reset.",
+           "displayed_url": "it-helpdesk-reset.com/security/verify",
+           "card_title": "Secure Verify",
+           "items": [
+               ("Request", "Password reset confirmation"),
+               ("Verification", "Current password + new password"),
+               ("Policy", "Minimum 12 characters"),
+               ("Session", "Web (Desktop)"),
+               ("Time", "Just now"),
+        ],
+           # تلميح خفيف (مش فضح مباشر)
+           "hint": "Tip: Most password resets are initiated from your official portal or internal helpdesk page.",
+       }
+
     else:
         context = {
             "title": "External Link Preview",
