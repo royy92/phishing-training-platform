@@ -1,3 +1,6 @@
+[![CI](https://github.com/royy92/phishing-training-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/royy92/phishing-training-platform/actions/workflows/ci.yml)
+
+
 phishing training platform (Django)
 
 
