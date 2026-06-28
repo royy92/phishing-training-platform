@@ -1,6 +1,5 @@
 import re
 import uuid
-import json
 
 from django.urls import reverse
 from django.contrib.auth.models import User

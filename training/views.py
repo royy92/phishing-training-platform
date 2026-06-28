@@ -3,14 +3,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from django.db.models import Count, Q, Sum, Avg
+from django.db.models import Count, Avg
 from django.views.decorators.http import require_POST
 from .models import UserScenarioRun, ScenarioStep, UserAction
-import random, string, csv, json
-from collections import defaultdict
+import random
+import string
+import csv
+import json
 
 from django.contrib.auth import get_user_model
 
@@ -18,10 +19,6 @@ from django.contrib.auth import get_user_model
 from .models import (
     Category,
     Scenario,
-    ScenarioStep,
-    UserScenarioRun,
-    UserAction,
-    UserResponse,
     ScenarioLog,
     render_step_body,
 )

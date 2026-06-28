@@ -1,5 +1,4 @@
 from training.models import Category, Scenario, ScenarioStep
-from django.contrib.auth.models import User
 
 def seed():
     # 1️⃣ إنشاء التصنيفات
