@@ -8,7 +8,7 @@ Phishing scenario training app featuring multiple scenarios, login/registration 
 
 # Requermint 
 - Python 3.11+
-- Django 5.x
+- Django 4.x
 - Tailwind CSS
 
 # Run
