@@ -2,11 +2,9 @@
 {% block content %}
 
 <style>
-  /* نخلي النصوص الرمادية على الخلفية الداكنة واضحة بدون ما نخرب الثيم */
   .soft-white{ color: rgba(255,255,255,.92) !important; }
   .soft-muted{ color: rgba(255,255,255,.72) !important; }
 
-  /* زر البنفسجي الموحد (نفس اللي فوق) */
   .btn-brand{
     background:#cba6f7 !important;
     color:#000 !important;
@@ -15,32 +13,25 @@
   }
   .btn-brand:hover{ background:#e9d5ff !important; }
 
-  /* نخلي links داخل المحاكاة واضحة */
   .sim-link{
     color:#89dceb !important;
     text-decoration: underline !important;
     font-weight:600 !important;
-  } 
+  }
 </style>
 
 <div class="container py-5">
   <div class="card bg-dark text-light border rounded-3 shadow-lg mx-auto" style="max-width: 920px;">
     <div class="card-body p-4">
 
-      <!-- Header -->
-      <h2 class="mb-1" style="color:#cba6f7;">{{ title }}</h2>
-      <div class="small text-muted">Debug slug: {{ link_slug }}</div>
-      <p class="soft-white mb-4">{{ subtitle }}</p>
-
-      <!-- Displayed URL (واضح) -->
-      <div class="p-3 rounded-3 mb-4" style="background:#1f232a; border:1px solid #2b2f36;">
-        <div class="small soft-muted mb-1">Displayed URL:</div>
-        <div class="fw-semibold text-info">{{ displayed_url }}</div>
-      </div>
       {% if link_slug == "revoke-session" %}
 
-        <div class="soft-white mb-3">
-          Review recent account activity and manage sessions.
+        <h2 class="mb-1" style="color:#cba6f7;">Security Activity Center</h2>
+        <p class="soft-white mb-4">Review recent account activity and manage sessions.</p>
+
+        <div class="p-3 rounded-3 mb-4" style="background:#1f232a; border:1px solid #2b2f36;">
+          <div class="small soft-muted mb-1">Displayed URL:</div>
+          <div class="fw-semibold text-info">{{ displayed_url }}</div>
         </div>
 
         <div class="p-3 rounded-3 mb-3" style="background:#151a20; border:1px solid #2b2f36;">
@@ -57,34 +48,6 @@
                 </div>
               {% endfor %}
             </div>
-          {% else %}
-            <div class="row g-2">
-              <div class="col-md-6">
-                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
-                  <span class="soft-muted">App</span><span class="soft-white">Cloud API Gateway</span>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
-                  <span class="soft-muted">IP</span><span class="soft-white">185.73.22.14</span>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
-                  <span class="soft-muted">Approx. location</span><span class="soft-white">Istanbul, TR</span>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
-                  <span class="soft-muted">Device</span><span class="soft-white">Linux (Firefox)</span>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
-                  <span class="soft-muted">Time</span><span class="soft-white">Just now</span>
-                </div>
-              </div>
-            </div>
           {% endif %}
         </div>
 
@@ -92,32 +55,63 @@
           🛈 For account changes, you may also open the Security Portal from your saved bookmark.
         </p>
 
-        <!-- أزرار شكلها واقعي بس ما بتنهي ولا تغير الستيب -->
-        <div class="d-flex flex-wrap gap-2 mb-4">
-          <button type="button" class="btn btn-primary" onclick="simMsg('Session revoked (simulated).');">
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <button
+              type="button"
+              class="btn btn-primary"
+              data-loading="Revoking session..."
+              data-success="✓ Session revoked successfully"
+              onclick="fakeAction(this)">
             Revoke this session
           </button>
-          <button type="button" class="btn btn-outline-light" onclick="simMsg('Thanks — your report was noted (simulated).');">
-            This wasn’t me
+        
+          <button
+              type="button"
+              class="btn btn-outline-light"
+              data-loading="Reporting activity..."
+              data-success="✓ Activity reported successfully"
+              onclick="fakeAction(this)">
+            This wasn't me
           </button>
-          <button type="button" class="btn btn-link soft-muted" onclick="simMsg('No changes made (simulated).');">
+        
+          <a class="btn btn-link text-light text-decoration-none"
+             href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
             Keep session
-          </button>
+          </a>
+        </div>
+        
+        <div class="d-flex gap-2 mt-3">
+          <a class="btn btn-outline-light"
+             href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+            Back to Scenario
+          </a>
+        
+          <a class="btn btn-brand"
+             href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+            Close Tab
+          </a>
         </div>
 
+        
+
       {% elif link_slug == "security-dashboard-login" %}
+
+        <h2 class="mb-3" style="color:#cba6f7;">Security Dashboard Login</h2>
+
+        <div class="p-3 rounded-3 mb-4" style="background:#1f232a; border:1px solid #2b2f36;">
+          <div class="small soft-muted mb-1">Displayed URL:</div>
+          <div class="fw-semibold text-info">{{ displayed_url }}</div>
+        </div>
 
         <div class="p-3 rounded" style="background:#151a1f; border:1px solid rgba(255,255,255,.08);">
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
               <h4 class="mb-1" style="color:#cba6f7;">Security Dashboard Login</h4>
-
               <div class="small soft-white">
                 Displayed URL:
                 <span class="text-info fw-semibold">{{ displayed_url }}</span>
               </div>
             </div>
-
             <span class="badge bg-secondary bg-opacity-25 text-light border border-secondary">
               Secure Access
             </span>
@@ -138,13 +132,13 @@
             <div class="col-md-7">
               <div class="p-3 rounded" style="background:#0f1318; border:1px solid rgba(255,255,255,.06);">
                 <label class="form-label soft-white small">Work Email</label>
-                <input class="form-control bg-dark text-light border-secondary" placeholder="name@company.com" />
+                <input type="email" class="form-control bg-dark text-light border-secondary" placeholder="name@company.com" autocomplete="off" autocapitalize="off" spellcheck="false" />
 
                 <label class="form-label soft-white small mt-3">Password</label>
-                <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="••••••••••" />
+                <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="••••••••••" autocomplete="new-password" />
 
                 <label class="form-label soft-white small mt-3">MFA Code</label>
-                <input class="form-control bg-dark text-light border-secondary" placeholder="123 456" />
+                <input class="form-control bg-dark text-light border-secondary" placeholder="123 456" autocomplete="off" />
 
                 <div class="d-flex justify-content-between align-items-center mt-3">
                   <div class="form-check">
@@ -156,9 +150,14 @@
                   <a href="#" class="small text-info text-decoration-none">Forgot password?</a>
                 </div>
 
-                <button type="button" class="btn btn-primary w-100 mt-3 btn-brand">
-                  Sign in
-                </button>
+               <button
+                   type="button"
+                   class="btn btn-brand w-100"
+                   data-loading="Signing in..."
+                   data-success="✓ Signed in successfully"
+                   onclick="fakeVerify(this)">
+                   Sign in
+               </button>
 
                 <div class="small soft-white mt-2">
                   By signing in, you agree to the Access Policy and Acceptable Use Guidelines.
@@ -166,28 +165,18 @@
               </div>
             </div>
 
+
             <div class="col-md-5">
               <div class="p-3 rounded h-100" style="background:#0f1318; border:1px solid rgba(255,255,255,.06);">
                 <div class="soft-white fw-semibold mb-2">Session Details</div>
                 <div class="small soft-white mb-2">Latest access attempt summary:</div>
-
                 <div class="small soft-white">
-                  <div class="d-flex justify-content-between">
-                    <span class="soft-muted">Device</span><span class="soft-white">Browser (Desktop)</span>
-                  </div>
-                  <div class="d-flex justify-content-between">
-                    <span class="soft-muted">Location</span><span class="soft-white">Auto-detected</span>
-                  </div>
-                  <div class="d-flex justify-content-between">
-                    <span class="soft-muted">IP</span><span class="soft-white">Hidden until sign-in</span>
-                  </div>
-                  <div class="d-flex justify-content-between">
-                    <span class="soft-muted">Time</span><span class="soft-white">Recent</span>
-                  </div>
+                  <div class="d-flex justify-content-between"><span class="soft-muted">Device</span><span class="soft-white">Browser (Desktop)</span></div>
+                  <div class="d-flex justify-content-between"><span class="soft-muted">Location</span><span class="soft-white">Auto-detected</span></div>
+                  <div class="d-flex justify-content-between"><span class="soft-muted">IP</span><span class="soft-white">Hidden until sign-in</span></div>
+                  <div class="d-flex justify-content-between"><span class="soft-muted">Time</span><span class="soft-white">Recent</span></div>
                 </div>
-
                 <hr class="border-secondary my-3"/>
-
                 <div class="small soft-white">
                   Tip: Most security portals can be accessed from your internal dashboard or saved bookmark.
                 </div>
@@ -196,12 +185,417 @@
           </div>
         </div>
 
-     
+
+        
+             <div class="d-flex gap-2 mt-4">
+                <a class="btn btn-outline-light" href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+                  Back to Scenario
+                </a>
+                <a class="btn btn-brand" href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+                  Close Tab
+                </a>
+              </div>
+
+
+      {% elif link_slug == "cloud-access-console" %}
+
+        <h2 class="mb-3" style="color:#cba6f7;">Cloud Access Console</h2>
+        <p class="soft-white">Sign in required to confirm IAM access identity.</p>
+
+        <div class="p-3 rounded-3 mb-4" style="background:#1f232a; border:1px solid #2b2f36;">
+          <div class="small soft-muted mb-1">Displayed URL:</div>
+          <div class="fw-semibold text-info">{{ displayed_url }}</div>
+        </div>
+
+        <div class="p-3 rounded-3 mb-4" style="background:#0f1318; border:1px solid rgba(255,255,255,.06);">
+          <div class="fw-semibold text-light mb-3">Access Identity Check</div>
+          <div class="row g-2">
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Sign-in method</span><span class="soft-white">Corporate SSO + MFA</span></div></div>
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Account</span><span class="soft-white">Corporate Cloud</span></div></div>
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Service</span><span class="soft-white">AWS IAM</span></div></div>
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Source IP</span><span class="soft-white">203.0.113.58</span></div></div>
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Region</span><span class="soft-white">ap-southeast-1</span></div></div>
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Time</span><span class="soft-white">Just now</span></div></div>
+          </div>
+        </div>
+
+        <p class="small soft-white mt-3 mb-4">
+          🛈 Tip: Many teams open cloud consoles from an internal dashboard or a saved bookmark to avoid mistyped domains.
+        </p>
+
+
+        <div class="p-3 rounded-3 mb-4 mt-4" style="background:#151a20; border:1px solid rgba(255,255,255,.06);">
+              
+             <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div>
+                    <div class="fw-semibold text-light">Corporate Cloud SSO</div>
+                    <div class="small soft-muted">
+                      Sign in to continue to the Cloud Access Console and confirm whether this access should remain active.
+                    </div>
+                  </div>
+              
+                  <span class="badge bg-secondary bg-opacity-25 text-light border border-secondary">
+                    MFA Required
+                  </span>
+                </div>
+              
+                <div class="mb-3">
+                  <label class="form-label small soft-white">Work Email</label>
+                  <input
+                    type="email"
+                    class="form-control bg-dark text-light border-secondary"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false">
+                </div>
+              
+                <div class="mb-3">
+                  <label class="form-label small soft-white">Password</label>
+                  <input
+                    type="password"
+                    class="form-control bg-dark text-light border-secondary"
+                    autocomplete="new-password">
+                </div>
+              
+                <div class="mb-3">
+                  <label class="form-label small soft-white">MFA Code</label>
+                  <input
+                    type="text"
+                    class="form-control bg-dark text-light border-secondary"
+                    autocomplete="off">
+                </div>
+              
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="remember-cloud">
+                    <label class="form-check-label small soft-white" for="remember-cloud">
+                      Remember this device for 7 days
+                    </label>
+                  </div>
+              
+                  <a href="#" class="small text-info text-decoration-none">
+                    Forgot password?
+                  </a>
+                </div>
+              
+                <button
+                    type="button"
+                    class="btn btn-brand w-100"
+                    data-loading="Signing in..."
+                    data-success="✓ Access granted successfully"
+                    onclick="fakeVerify(this)">
+                    Continue
+                </button>
+              
+                <div class="small soft-white mt-2">
+                  By continuing, you agree to the Cloud Access Policy and Acceptable Use Guidelines.
+                </div>
+
+                
+                        <div class="d-flex gap-2 mt-4">
+                                <a class="btn btn-outline-light" href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+                                  Back to Scenario
+                                </a>
+                                <a class="btn btn-brand" href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+                                  Close Tab
+                                </a>
+                              </div>
+                
+              
+              </div>
+
+  
+
+      {% elif link_slug == "password-reset-email" %}
+
+        <h2 class="mb-3" style="color:#cba6f7;">Password Reset Portal</h2>
+        <p class="soft-white">Complete the password update to keep your account access uninterrupted.</p>
+
+        <div class="p-3 rounded-3 mb-4" style="background:#1f232a; border:1px solid #2b2f36;">
+          <div class="small soft-muted mb-1">Displayed URL:</div>
+          <div class="fw-semibold text-info">it-helpdesk-reset.com/password/reset</div>
+        </div>
+
+        <div class="p-3 rounded-3 mb-3" style="background:#151a20; border:1px solid #2b2f36;">
+          <div class="fw-semibold soft-white mb-3">Reset request details</div>
+          <div class="row g-2">
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Request type</span><span class="soft-white">Password update</span></div></div>
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Account</span><span class="soft-white">Corporate SSO</span></div></div>
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Delivery method</span><span class="soft-white">Email link</span></div></div>
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Ticket reference</span><span class="soft-white">HD-PR-48219</span></div></div>
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Requested by</span><span class="soft-white">IT Support Automation</span></div></div>
+            <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Time</span><span class="soft-white">Just now</span></div></div>
+          </div>
+        </div>
+
+        <p class="small soft-white mt-3 mb-4">
+          🛈 Tip: Many employees start password updates from the internal Helpdesk portal or saved bookmarks for faster access.
+        </p>
+
+
+
+        {% elif link_slug == "password-reset-verify" %}
+        
+          <h2 class="mb-3" style="color:#cba6f7;">Password Reset Verification</h2>
+        
+          <p class="soft-white small mb-4">
+            Complete a secure verification step to continue the password reset.
+          </p>
+        
+          <div class="p-3 rounded-3 mb-3" style="background:#1f232a; border:1px solid #2b2f36;">
+            <div class="small soft-muted mb-2">Displayed URL:</div>
+            <div class="fw-semibold text-info">it-helpdesk-reset.com/security/verify</div>
+          </div>
+        
+          <div class="p-3 rounded-3 mb-3" style="background:#151a20; border:1px solid #2b2f36;">
+            <div class="fw-semibold soft-white mb-3">Secure Verify</div>
+        
+            <div class="row g-2 small">
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                  <span class="soft-muted">Request</span>
+                  <span class="soft-white">Password reset confirmation</span>
+                </div>
+              </div>
+        
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                  <span class="soft-muted">Verification</span>
+                  <span class="soft-white">Current password + new password</span>
+                </div>
+              </div>
+        
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                  <span class="soft-muted">Policy</span>
+                  <span class="soft-white">Minimum 12 characters</span>
+                </div>
+              </div>
+        
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                  <span class="soft-muted">Session</span>
+                  <span class="soft-white">Web (Desktop)</span>
+                </div>
+              </div>
+        
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;">
+                  <span class="soft-muted">Time</span>
+                  <span class="soft-white">Just now</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <p class="small soft-white mt-3 mb-4">
+            🛈 Tip: Most password resets are initiated from your official portal or internal Helpdesk page.
+          </p>
+
+
+
+          <div class="mt-4 p-3 rounded-3" style="background:#151a20; border:1px solid #2b2f36;">
+          
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small soft-white">Current Password</label>
+                <input
+                    type="password"
+                    class="form-control form-control-sm bg-dark text-light border-secondary"
+                    autocomplete="new-password"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    readonly
+                    onfocus="this.removeAttribute('readonly');">
+              </div>
+          
+              <div class="col-md-6">
+                <label class="form-label small soft-white">New Password</label>
+                <input type="password" class="form-control form-control-sm bg-dark text-light border-secondary">
+              </div>
+          
+              <div class="col-md-6">
+                <label class="form-label small soft-white">Confirm New Password</label>
+                <input type="password" class="form-control form-control-sm bg-dark text-light border-secondary">
+              </div>
+          
+              <div class="col-md-6">
+                <label class="form-label small soft-white">Verification Code (optional)</label>
+                <input
+                    type="text"
+                    class="form-control form-control-sm bg-dark text-light border-secondary"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    readonly
+                    onfocus="this.removeAttribute('readonly');">
+              </div>
+
+              <button
+                  type="button"
+                  id="verify-btn"
+                  class="btn btn-brand w-100"
+                  data-loading="Verifying..."
+                  data-success="Your session has expired. Please log in again later."
+                  onclick="fakeVerify(this)">
+                  Verify &amp; Continue
+              </button>
+          
+          
+              <div class="col-12">
+                <div class="small soft-muted">
+                  By continuing, you confirm the password change request.
+                </div>
+              </div>
+          
+            </div>
+          
+          </div>
+
+          <div class="d-flex gap-2 mt-4">
+            <a class="btn btn-outline-light"
+               href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+              Back to Scenario
+            </a>
+          
+            <a class="btn btn-brand"
+               href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+              Close Tab
+            </a>
+          </div>
+
+
+
+
+          {% elif link_slug == "security-verify-access" %}
+          
+            <h2 class="mb-3" style="color:#cba6f7;">Account Security Verification</h2>
+          
+            <p class="soft-white">
+              Verify recent sign-in activity to restore access to your account.
+            </p>
+          
+            <div class="p-3 rounded-3 mb-4" style="background:#1f232a; border:1px solid #2b2f36;">
+              <div class="small soft-muted mb-1">Displayed URL:</div>
+              <div class="fw-semibold text-info">security-verify-access.com</div>
+            </div>
+          
+            <div class="p-3 rounded-3 mb-3" style="background:#151a20; border:1px solid #2b2f36;">
+              <div class="fw-semibold soft-white mb-3">Verification summary</div>
+          
+              <div class="row g-2 small">
+                <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Verification type</span><span class="soft-white">Sign-in confirmation</span></div></div>
+                <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Account</span><span class="soft-white">Corporate SSO</span></div></div>
+                <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Method</span><span class="soft-white">Secure verification page</span></div></div>
+                <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Session status</span><span class="soft-white">Temporarily locked</span></div></div>
+              </div>
+            </div>
+          
+            <p class="small soft-white mt-3 mb-4">
+              🛈 Tip: Many organizations provide account recovery from the official security portal or internal helpdesk dashboard.
+            </p>
+          
+          
+            <div class="d-flex gap-2 mt-4">
+              <a class="btn btn-outline-light"
+                 href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+                Back to Scenario
+              </a>
+              <a class="btn btn-brand"
+                 href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+                Close Tab
+              </a>
+            </div>
+
+
+
+
+
+
+
+            {% elif link_slug == "security-verify-access-form" %}
+            
+              <h2 class="mb-3" style="color:#cba6f7;">Account Security Verification</h2>
+            
+              <p class="soft-white">
+                Verify recent sign-in activity to restore access to your account.
+              </p>
+            
+              <div class="p-3 rounded-3 mb-4" style="background:#1f232a; border:1px solid #2b2f36;">
+                <div class="small soft-muted mb-1">Displayed URL:</div>
+                <div class="fw-semibold text-info">security-verify-access.com</div>
+              </div>
+            
+              <div class="p-3 rounded-3 mb-3" style="background:#151a20; border:1px solid #2b2f36;">
+                <div class="fw-semibold soft-white mb-3">Verification summary</div>
+            
+                <div class="row g-2 small">
+                  <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Verification type</span><span class="soft-white">Sign-in confirmation</span></div></div>
+                  <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Account</span><span class="soft-white">Corporate SSO</span></div></div>
+                  <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Method</span><span class="soft-white">Secure verification page</span></div></div>
+                  <div class="col-md-6"><div class="d-flex justify-content-between p-2 rounded" style="background:#1b2027;"><span class="soft-muted">Session status</span><span class="soft-white">Temporarily locked</span></div></div>
+                </div>
+              </div>
+            
+              <p class="small soft-white mt-3 mb-4">
+                🛈 Tip: Many organizations provide account recovery from the official security portal or internal helpdesk dashboard.
+              </p>
+            
+              <div class="mt-4 p-3 rounded-3" style="background:#151a20; border:1px solid #2b2f36;">
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label class="form-label small soft-white">Username</label>
+                    <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                  </div>
+            
+                  <div class="col-12">
+                    <label class="form-label small soft-white">Password</label>
+                    <input type="password" class="form-control form-control-sm bg-dark text-light border-secondary" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');">
+                  </div>
+            
+                  <div class="col-12">
+                    <label class="form-label small soft-white">MFA Code</label>
+                    <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                  </div>
+            
+                  <div class="col-12 mt-2">
+                    <button type="button" class="btn btn-brand w-100" onclick="fakeVerify(this)" data-loading="Verifying..." data-success="✓ Verification Completed Successfully">
+                      Continue
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="d-flex gap-2 mt-4">
+                <a class="btn btn-outline-light"
+                   href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+                  Back to Scenario
+                </a>
+                <a class="btn btn-brand"
+                   href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+                  Close Tab
+                </a>
+              </div>
+
+
+          
+
       {% else %}
+
+        <h2 class="mb-1" style="color:#cba6f7;">{{ title }}</h2>
+        <p class="soft-white mb-4">{{ subtitle }}</p>
+
+        <div class="p-3 rounded-3 mb-4" style="background:#1f232a; border:1px solid #2b2f36;">
+          <div class="small soft-muted mb-1">Displayed URL:</div>
+          <div class="fw-semibold text-info">{{ displayed_url }}</div>
+        </div>
 
         <div class="p-3 rounded-3 mb-3" style="background:#151a20; border:1px solid #2b2f36;">
           <div class="fw-semibold soft-white mb-3">{{ card_title }}</div>
-
           {% if items %}
             <div class="row g-2">
               {% for k,v in items %}
@@ -222,103 +616,21 @@
           <p class="small soft-white mt-3 mb-4">🛈 {{ hint }}</p>
         {% endif %}
 
+
+        <div class="d-flex gap-2 mt-4">
+          <a class="btn btn-outline-light"
+             href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+            Back to Scenario
+          </a>
+          <a class="btn btn-brand"
+             href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
+            Close Tab
+          </a>
+        </div>
+
       {% endif %}
-
-      <!-- Footer buttons (موحدين) -->
-      <div class="d-flex gap-2 mt-4">
-        <a class="btn btn-outline-light"
-           href="{% url 'training:run_step' run_uuid=run.run_uuid index=step_index %}">
-          Back to Scenario
-        </a>
-        <button type="button" class="btn btn-brand"
-                onclick="window.close();">
-          Close Tab
-        </button>
-      </div>
-
-      <div id="sim-msg" class="mt-3 text-success small" style="display:none;"></div>
-
-    </div>
-  </div>
+      
 </div>
-{% if link_slug == "cloud-access-console" %}
-  <div class="p-3 rounded-3 mb-4" style="background:#0f1318; border:1px solid rgba(255,255,255,.06);">
-    <div class="d-flex justify-content-between align-items-start mb-2">
-      <div class="fw-semibold text-light">Corporate Cloud SSO</div>
-      <span class="badge bg-secondary bg-opacity-25 text-light border border-secondary">MFA Required</span>
-    </div>
-
-    <p class="text-secondary small mb-3">
-      Sign in to continue to the Cloud Access Console and confirm whether this access should remain active.
-    </p>
-
-    <label class="form-label text-secondary small">Work Email</label>
-    <input class="form-control bg-dark text-light border-secondary" placeholder="name@company.com" />
-
-    <label class="form-label text-secondary small mt-3">Password</label>
-    <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="••••••••••" />
-
-    <label class="form-label text-secondary small mt-3">MFA Code</label>
-    <input class="form-control bg-dark text-light border-secondary" placeholder="123 456" />
-
-    <div class="d-flex justify-content-between align-items-center mt-3">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="rememberCloud">
-        <label class="form-check-label text-secondary small" for="rememberCloud">
-          Remember this device for 7 days
-        </label>
-      </div>
-      <a href="#" class="small text-info text-decoration-none" onclick="event.preventDefault(); simMsg('Password recovery page (simulated).');">
-        Forgot password?
-      </a>
-    </div>
-
-    <button type="button"
-            class="btn btn-primary w-100 mt-3"
-            style="background:#cba6f7;border:none;color:#111;"
-            onclick="simMsg('Authentication request received (simulated).');">
-      Continue
-    </button>
-
-    <div class="small text-secondary mt-2">
-      By continuing, you agree to the Cloud Access Policy and Acceptable Use Guidelines.
-    </div>
-  </div>
-{% endif %}
-{% if link_slug == "password-reset-verify" %}
-  <div class="p-3 rounded-3 mb-4" style="background:#0f1318; border:1px solid rgba(255,255,255,.06);">
-    <div class="row g-3">
-      <div class="col-md-6" style="opacity:.8;">
-        <label class="form-label text-light small">Current Password</label>
-        <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="••••••••••" />
-      </div>
-      <div class="col-md-6" style="opacity:.8;">
-        <label class="form-label text-light small">New Password</label>
-        <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="Create a new password" />
-      </div>
-
-      <div class="col-md-6" style="opacity:.8;">
-        <label class="form-label text-light small">Confirm New Password</label>
-        <input type="password" class="form-control bg-dark text-light border-secondary" placeholder="Repeat new password" />
-      </div>
-      <div class="col-md-6" style="opacity:.8;">
-        <label class="form-label text-light small">Verification Code (optional)</label>
-        <input class="form-control bg-dark text-light border-secondary" placeholder="123 456" />
-      </div>
-    </div>
-
-    <button type="button"
-            class="btn btn-primary w-100 mt-3"
-            style="background:#cba6f7;border:none;color:#111;"
-            onclick="simMsg('Verification completed (simulated).');">
-      Verify & Continue
-    </button>
-
-    <div class="small text-muted mt-2" style="opacity:.8;">
-      By continuing, you confirm this password change request.
-    </div>
-  </div>
-{% endif %}
 
 <script>
   function simMsg(text){
@@ -327,6 +639,41 @@
     el.style.display = "block";
     setTimeout(() => { el.style.display = "none"; }, 2500);
   }
+</script>
+
+<script>
+function fakeVerify(button) {
+    button.disabled = true;
+
+    const loadingText = button.dataset.loading || "Verifying...";
+    const successText = button.dataset.success || "✓ Verification Completed Successfully";
+
+    button.innerText = loadingText;
+
+    setTimeout(() => {
+        button.classList.remove("btn-brand");
+        button.classList.add("btn-success");
+        button.innerText = successText;
+    }, 1200);
+}
+</script>
+
+
+<script>
+function fakeAction(button) {
+    button.disabled = true;
+
+    const loadingText = button.dataset.loading || "Processing...";
+    const successText = button.dataset.success || "✓ Done";
+
+    button.innerText = loadingText;
+
+    setTimeout(() => {
+        button.classList.remove("btn-primary", "btn-outline-light");
+        button.classList.add("btn-success");
+        button.innerText = successText;
+    }, 1200);
+}
 </script>
 
 {% endblock %}

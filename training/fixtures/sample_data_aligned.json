@@ -1,0 +1,668 @@
+[
+{
+  "model": "training.category",
+  "pk": 1,
+  "fields": {
+    "name": "IT",
+    "slug": "it",
+    "description": "Baseline and follow-up phishing awareness scenarios for IT and technical users.",
+    "created_at": "2026-07-02T00:00:00Z",
+    "updated_at": "2026-07-02T00:00:00Z"
+  }
+},
+{
+  "model": "training.category",
+  "pk": 2,
+  "fields": {
+    "name": "Students",
+    "slug": "students",
+    "description": "Baseline and follow-up phishing awareness scenarios for students.",
+    "created_at": "2026-07-02T00:00:00Z",
+    "updated_at": "2026-07-02T00:00:00Z"
+  }
+},
+{
+  "model": "training.category",
+  "pk": 3,
+  "fields": {
+    "name": "General",
+    "slug": "general",
+    "description": "Baseline and follow-up phishing awareness scenarios for everyday users.",
+    "created_at": "2026-07-02T00:00:00Z",
+    "updated_at": "2026-07-02T00:00:00Z"
+  }
+},
+{
+  "model": "training.scenario",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "title": "Suspicious API Session / CSP Token Alert",
+    "message": "A suspicious API session was detected for your account.",
+    "content": "Baseline scenario used to measure the user's initial awareness before training.",
+    "is_phishing": true,
+    "difficulty": "intermediate",
+    "depth": 5,
+    "phase": 1,
+    "created_at": "2026-07-02T00:00:00Z",
+    "updated_at": "2026-07-02T00:00:00Z"
+  }
+},
+{
+  "model": "training.scenario",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "title": "Cloud Access Breach Simulation",
+    "message": "Unauthorized cloud access activity was detected using your IAM credentials.",
+    "content": "Follow-up scenario used to measure whether the user learned from the baseline IT scenario.",
+    "is_phishing": true,
+    "difficulty": "advanced",
+    "depth": 5,
+    "phase": 2,
+    "created_at": "2026-07-02T00:00:00Z",
+    "updated_at": "2026-07-02T00:00:00Z"
+  }
+},
+{
+  "model": "training.scenario",
+  "pk": 3,
+  "fields": {
+    "category": 2,
+    "title": "Tuition Payment Verification Scam",
+    "message": "A fake tuition payment verification message asks the student to verify payment details.",
+    "content": "Baseline scenario for student phishing awareness.",
+    "is_phishing": true,
+    "difficulty": "beginner",
+    "depth": 5,
+    "phase": 1,
+    "created_at": "2026-07-02T00:00:00Z",
+    "updated_at": "2026-07-02T00:00:00Z"
+  }
+},
+{
+  "model": "training.scenario",
+  "pk": 4,
+  "fields": {
+    "category": 2,
+    "title": "Scholarship Delay Verification",
+    "message": "A fake scholarship delay message asks the student to confirm scholarship details.",
+    "content": "Follow-up scenario for student phishing awareness.",
+    "is_phishing": true,
+    "difficulty": "intermediate",
+    "depth": 5,
+    "phase": 2,
+    "created_at": "2026-07-02T00:00:00Z",
+    "updated_at": "2026-07-02T00:00:00Z"
+  }
+},
+{
+  "model": "training.scenario",
+  "pk": 5,
+  "fields": {
+    "category": 3,
+    "title": "Password Expiry Scam",
+    "message": "A fake IT support message claims that the user's password will expire soon.",
+    "content": "Baseline scenario for general phishing awareness.",
+    "is_phishing": true,
+    "difficulty": "beginner",
+    "depth": 5,
+    "phase": 1,
+    "created_at": "2026-07-02T00:00:00Z",
+    "updated_at": "2026-07-02T00:00:00Z"
+  }
+},
+{
+  "model": "training.scenario",
+  "pk": 6,
+  "fields": {
+    "category": 3,
+    "title": "Account Security Verification",
+    "message": "A fake account security alert asks the user to verify recent sign-in activity.",
+    "content": "Follow-up scenario for general phishing awareness.",
+    "is_phishing": true,
+    "difficulty": "intermediate",
+    "depth": 5,
+    "phase": 2,
+    "created_at": "2026-07-02T00:00:00Z",
+    "updated_at": "2026-07-02T00:00:00Z"
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 1,
+  "fields": {
+    "scenario": 1,
+    "order": 1,
+    "step_type": "email",
+    "title": "Action Needed: Verify Your Access",
+    "body": "<p>You received an automated email from your company's security system:</p>\n<blockquote>\"New API session detected for your account from an unfamiliar IP.\"</blockquote>\n<p>The email includes a link:</p>\n<p><a class=\"btn btn-outline-info btn-sm\" href=\"{% url 'training:track_link' run.run_uuid step.id 'revoke-session' %}\">Revoke Session</a></p>\n<p>Would you click the link to check the session?</p>",
+    "link_slug": "revoke-session",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Login Spoof",
+    "risk_message": "You interacted with a fake login page mimicking your organization's system. Entering your credentials would give attackers direct access."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 2,
+  "fields": {
+    "scenario": 1,
+    "order": 2,
+    "step_type": "fake_login",
+    "title": "Security Dashboard Login",
+    "body": "<p>The link takes you to a webpage that looks exactly like your company's SSO login portal.</p>\n<p><strong>Displayed URL:</strong> <a class=\"text-info\" href=\"{% url 'training:track_link' run.run_uuid step.id 'security-dashboard-login' %}\">security-auth.company-safe.net</a></p>\n<p>It asks for your credentials and MFA code.</p>\n<p>Would you proceed to log in?</p>",
+    "link_slug": "security-dashboard-login",
+    "timer_seconds": null,
+    "risk_type": "OTP Theft",
+    "risk_message": "A phishing form requested a one-time code. Attackers could hijack your MFA session."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 3,
+  "fields": {
+    "scenario": 1,
+    "order": 3,
+    "step_type": "notice",
+    "title": "System Message",
+    "body": "<p>After entering your credentials, you receive a system warning:</p>\n<blockquote>Your account access is temporarily locked due to suspicious activity.</blockquote>\n<p>The page instructs you to verify your identity via email:</p>\n<p><a class=\"btn btn-outline-info btn-sm\" href=\"{% url 'training:track_link' run.run_uuid step.id 'open-verification-email' %}\">Open verification email</a></p>",
+    "link_slug": "open-verification-email",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Security Update",
+    "risk_message": "The step faked a security update. Proceeding could have installed spyware."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 4,
+  "fields": {
+    "scenario": 1,
+    "order": 4,
+    "step_type": "notice",
+    "title": "Account Notice",
+    "body": "<div class=\"text-center\"><p>Always verify URLs before entering credentials.</p><br><p>Company domains should never include words like <em>\"auth-secure\"</em> or <em>\"login-safe\"</em> unless officially verified.</p><br><p>Use your internal IT dashboard instead of following random email links.</p></div>",
+    "link_slug": "account-notice",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Policy Confirmation",
+    "risk_message": "Fake policy acceptance prompt detected. Accepting would redirect your data to malicious servers."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 5,
+  "fields": {
+    "scenario": 1,
+    "order": 5,
+    "step_type": "summary",
+    "title": "Scenario Summary",
+    "body": "<p>✅ This exercise demonstrated how attackers mimic corporate security alerts.</p>\n<p>Always confirm alerts directly via your company's official security portal.</p>\n<p>Well done for completing the IT / Professionals phishing awareness scenario!</p>",
+    "link_slug": "api-session-summary",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Full Breach",
+    "risk_message": "You nearly enabled attackers to control your account fully. They could lock you out permanently."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 6,
+  "fields": {
+    "scenario": 2,
+    "order": 1,
+    "step_type": "email",
+    "title": "Your Account Needs Attention",
+    "body": "<p>The SOC team detected unauthorized activity using your AWS IAM access key.</p>\n<p>Your key appears to have been used from an IP in Singapore (203.0.113.58).</p>\n<p>Please verify your access identity immediately to avoid suspension of your credentials.</p>\n<p><a class=\"btn btn-outline-info btn-sm\" href=\"{% url 'training:track_link' run.run_uuid step.id 'cloud-access-console' %}\">cloud-auth-console-secure.company-safe.net</a></p>\n<p>Tip: Always verify the domain before entering SSO credentials.</p>",
+    "link_slug": "cloud-access-console",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Login Spoof",
+    "risk_message": "You interacted with a fake login page mimicking your organization's system. Entering your credentials would give attackers direct access."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 7,
+  "fields": {
+    "scenario": 2,
+    "order": 2,
+    "step_type": "form",
+    "title": "Cloud Access Console",
+    "body": "<p>Your session has expired. Please reauthenticate to confirm your IAM identity.</p>\n<p>Failure to verify may result in temporary suspension of your API permissions.</p>",
+    "link_slug": "cloud-console-login",
+    "form_schema": {
+      "fields": [
+        {
+          "name": "f_email",
+          "label": "Email or IAM ID",
+          "type": "text"
+        },
+        {
+          "name": "f_password",
+          "label": "Password",
+          "type": "password"
+        }
+      ],
+      "submit_label": "Reauthenticate"
+    },
+    "timer_seconds": null,
+    "risk_type": "OTP Theft",
+    "risk_message": "A phishing form requested a one-time code. Attackers could hijack your MFA session."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 8,
+  "fields": {
+    "scenario": 2,
+    "order": 3,
+    "step_type": "notice",
+    "title": "Session Timeout",
+    "body": "<p>Thank you for your quick response.</p>\n<p>Our systems flagged this login as a simulated test under the company's phishing awareness program.</p>\n<p>No credentials were stored. This step is part of your annual SOC resilience training.</p>",
+    "link_slug": "cloud-session-timeout",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Security Update",
+    "risk_message": "The step faked a security update. Proceeding could have installed spyware."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 9,
+  "fields": {
+    "scenario": 2,
+    "order": 4,
+    "step_type": "notice",
+    "title": "Service Update",
+    "body": "<p>Always validate URLs when prompted for reauthentication, especially if related to IAM or cloud consoles.</p>\n<p>Ensure your browser uses your organization's SSO domain (e.g. login.therezon.com).</p>\n<p>Never click on shortened URLs or externally hosted login forms.</p>",
+    "link_slug": "cloud-service-update",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Policy Confirmation",
+    "risk_message": "Fake policy acceptance prompt detected. Accepting would redirect your data to malicious servers."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 10,
+  "fields": {
+    "scenario": 2,
+    "order": 5,
+    "step_type": "summary",
+    "title": "Scenario Summary",
+    "body": "<p>This scenario tested response behavior to advanced spear-phishing techniques targeting IAM users.</p>\n<p>Professionals who double-checked the domain and reported the email correctly identified the threat.</p>\n<p>Remember: even experienced users can be deceived when urgency and authority are exploited.</p>",
+    "link_slug": "cloud-access-summary",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Full Breach",
+    "risk_message": "You nearly enabled attackers to control your account fully. They could lock you out permanently."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 11,
+  "fields": {
+    "scenario": 3,
+    "order": 1,
+    "step_type": "email",
+    "title": "Important Account Notification",
+    "body": "<p>Dear Student,</p>\n<p>Our records indicate that your tuition payment for the current semester has not been fully processed.</p>\n<p>Please verify your payment details by accessing the Student Financial Portal below.</p>\n<p><a class=\"btn btn-outline-info btn-sm\" href=\"{% url 'training:track_link' run.run_uuid step.id 'tuition-payment-portal' %}\">student-finance-portal.company-safe.net</a></p>",
+    "link_slug": "tuition-payment-portal",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Login Spoof",
+    "risk_message": "You interacted with a fake login page mimicking your organization's system. Entering your credentials would give attackers direct access."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 12,
+  "fields": {
+    "scenario": 3,
+    "order": 2,
+    "step_type": "fake_login",
+    "title": "Student Payment Portal",
+    "body": "<p>You are redirected to a page identical to the real Student Finance Portal.</p>\n<p>The form requests your student ID and password to verify your tuition payment.</p>",
+    "link_slug": "student-payment-login",
+    "form_schema": {
+      "fields": [
+        {
+          "name": "f_student_id",
+          "label": "Student ID",
+          "type": "text"
+        },
+        {
+          "name": "f_password",
+          "label": "Password",
+          "type": "password"
+        }
+      ],
+      "submit_label": "Verify Payment",
+      "loading_label": "Verifying Payment...",
+      "success_label": "✓ Payment Verified"
+    },
+    "timer_seconds": null,
+    "risk_type": "OTP Theft",
+    "risk_message": "A phishing form requested a one-time code. Attackers could hijack your MFA session."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 13,
+  "fields": {
+    "scenario": 3,
+    "order": 3,
+    "step_type": "form",
+    "title": "Account Input Page",
+    "body": "<p>Please confirm your student ID and bank account number for verification.</p>",
+    "link_slug": "student-account-input",
+    "form_schema": {
+      "fields": [
+        {
+          "name": "f_student_id",
+          "label": "Student ID",
+          "type": "text"
+        },
+        {
+          "name": "f_bank_account",
+          "label": "Bank Account Number",
+          "type": "text"
+        }
+      ],
+      "submit_label": "Confirm"
+    },
+    "timer_seconds": null,
+    "risk_type": "Security Update",
+    "risk_message": "The step faked a security update. Proceeding could have installed spyware."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 14,
+  "fields": {
+    "scenario": 3,
+    "order": 4,
+    "step_type": "notice",
+    "title": "System Message",
+    "body": "<p>Unusual verification attempt detected from your account.</p>\n<p>If this was not you, report this activity immediately to your university's IT support.</p>",
+    "link_slug": "student-system-message",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Policy Confirmation",
+    "risk_message": "Fake policy acceptance prompt detected. Accepting would redirect your data to malicious servers."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 15,
+  "fields": {
+    "scenario": 3,
+    "order": 5,
+    "step_type": "summary",
+    "title": "Scenario Summary",
+    "body": "<p>Legitimate universities never ask for your bank details via email.</p>\n<p>Always verify payment issues directly from the official finance portal.</p>\n<p>Be cautious of urgent payment warnings and unknown links.</p>",
+    "link_slug": "tuition-payment-summary",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Full Breach",
+    "risk_message": "You nearly enabled attackers to control your account fully. They could lock you out permanently."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 16,
+  "fields": {
+    "scenario": 4,
+    "order": 1,
+    "step_type": "email",
+    "title": "Payment Confirmation Required",
+    "body": "<p>You have received an email titled: \"Delay in Your Scholarship Payment\".</p>\n<p>The message asks you to log into your university portal to confirm your scholarship details.</p>\n<p><a class=\"btn btn-outline-info btn-sm\" href=\"{% url 'training:track_link' run.run_uuid step.id 'scholarship-portal' %}\">portal-scholarships.univ.example</a></p>\n<p>Does this look legitimate? Check the sender's email address and inspect the link carefully before clicking.</p>",
+    "link_slug": "scholarship-portal",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Phishing Link",
+    "risk_message": "You clicked a fake scholarship link leading to a malicious site. Attackers could harvest your academic and personal information."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 17,
+  "fields": {
+    "scenario": 4,
+    "order": 2,
+    "step_type": "fake_login",
+    "title": "Fake Login Page",
+    "body": "<p>After clicking the link, you are redirected to a page that looks almost identical to your university's login portal.</p>\n<p><span class=\"text-info\">http://univ-login-secure.example.com</span></p>\n<p><p>Sign in to confirm your scholarship details and view any payment updates.</p>",
+    "link_slug": "scholarship-fake-login",
+    "form_schema": {
+      "fields": [
+        {
+          "name": "f_username",
+          "label": "University ID or Email",
+          "type": "text"
+        },
+        {
+          "name": "f_password",
+          "label": "Password",
+          "type": "password"
+        }
+      ],
+      "submit_label": "Sign in"
+    },
+    "timer_seconds": null,
+    "risk_type": "Fake Form",
+    "risk_message": "A fraudulent scholarship form requested personal and financial details. Submitting it could expose your identity and student account."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 18,
+  "fields": {
+    "scenario": 4,
+    "order": 3,
+    "step_type": "notice",
+    "title": "Service Update",
+    "body": "<p>After entering your credentials, a system alert appears:</p>\n<blockquote><em>\"Unusual activity detected in your account. Please reset your password immediately.\"</em></blockquote>\n<p>Would you click the reset link inside the same email?</p>",
+    "link_slug": "scholarship-service-update",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Attachment Risk",
+    "risk_message": "The document was malicious and designed to infect your system. Opening it could install spyware stealing stored passwords."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 19,
+  "fields": {
+    "scenario": 4,
+    "order": 4,
+    "step_type": "notice",
+    "title": "Session Timeout",
+    "body": "<p>Remember: Legitimate organizations never ask you to log in via email links.</p>\n<p>Always double-check the website URL and make sure it is part of your university's official domain.</p>\n<p>Enable two-factor authentication for stronger protection against phishing attacks.</p>",
+    "link_slug": "scholarship-session-timeout",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Payment Fraud",
+    "risk_message": "A fake scholarship fee page appeared. Proceeding could leak your banking credentials."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 20,
+  "fields": {
+    "scenario": 4,
+    "order": 5,
+    "step_type": "summary",
+    "title": "Scenario Summary",
+    "body": "<p>In this simulation, you learned how to identify and avoid phishing emails pretending to be related to scholarship payments.</p>\n<p><strong>Check the sender:</strong> Is the email domain official and expected?</p>\n<p><strong>Inspect the link:</strong> Hover and verify the portal URL matches the university's real domain.</p>\n<p><strong>Watch urgency cues</strong> such as <em>\"24 hours\"</em>, <em>\"account locked\"</em>, or <em>\"payment delayed\"</em>.</p>\n<p>Never click suspicious links or share login credentials through unknown portals.</p>\n<p><strong>Best practice:</strong> Open the university portal directly from a saved bookmark or the official website, and report suspicious messages.</p>",
+    "link_slug": "scholarship-summary",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Full Compromise",
+    "risk_message": "You nearly handed full access to attackers. They could change your passwords and impersonate you."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 21,
+  "fields": {
+    "scenario": 5,
+    "order": 1,
+    "step_type": "email",
+    "title": "Important Account Notification",
+    "body": "<p>You received an email from \"IT Support\" with the subject:</p>\n<blockquote>Your password will expire in 24 hours.</blockquote>\n<p>From: IT Support &lt;it-support@helpdesk-reset.com&gt;</p>\n<p>The message looks urgent and includes a reset link.</p>\n<p><a class=\"btn btn-outline-info btn-sm\" href=\"{% url 'training:track_link' run.run_uuid step.id 'password-reset-preview' %}\">Reset password</a></p>\n<p>Does this match your company's official domain?</p>",
+    "link_slug": "password-reset-preview",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Login Spoof",
+    "risk_message": "You interacted with a fake login page mimicking your organization's system. Entering your credentials would give attackers direct access."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 22,
+  "fields": {
+    "scenario": 5,
+    "order": 2,
+    "step_type": "fake_login",
+    "title": "Fake Password Reset Portal",
+    "body": "<p>The link opens a webpage that looks identical to your company's password reset portal.</p>\r\n<p><a class=\"btn btn-outline-info btn-sm\" href=\"{% url 'training:track_link' run.run_uuid step.id 'password-reset-verify' %}\">Open password reset verification</a></p>\r\n<p>The page asks for your current password and a new one to complete the reset.</p>\r\n<p>Would you enter your credentials here?</p>",
+    "link_slug": "password-reset-verify",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "OTP Theft",
+    "risk_message": "A phishing form requested a one-time code. Attackers could hijack your MFA session."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 23,
+  "fields": {
+    "scenario": 5,
+    "order": 3,
+    "step_type": "notice",
+    "title": "Account Notice",
+    "body": "<p>After you submit your credentials, a message appears:</p>\r\n<blockquote><em>\"Your session has expired. Please log in again later.\"<em></blockquote>\r\n<p>Behind the scenes, your data has already been sent to an attacker.</p>",
+    "link_slug": "password-account-notice",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Security Update",
+    "risk_message": "The step faked a security update. Proceeding could have installed spyware."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 24,
+  "fields": {
+    "scenario": 5,
+    "order": 4,
+    "step_type": "notice",
+    "title": "System Message",
+    "body": "<p>Always check the sender's email domain and the URL before clicking any password reset link.</p>\r\n\r\n<p>Legitimate IT departments never ask for your password through email forms.</p>\r\n\r\n<p>If you're unsure, contact your IT support directly.</p>",
+    "link_slug": "password-system-message",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Policy Confirmation",
+    "risk_message": "Fake policy acceptance prompt detected. Accepting would redirect your data to malicious servers."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 25,
+  "fields": {
+    "scenario": 5,
+    "order": 5,
+    "step_type": "summary",
+    "title": "Scenario Summary",
+    "body": "<p>You learned how phishing emails exploit urgency to steal credentials.</p>\n<p>Always verify reset requests via official channels or directly from your organization's login page.</p>\n<p>Great job completing the Password Expiry Scam awareness exercise!</p>",
+    "link_slug": "password-expiry-summary",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Full Breach",
+    "risk_message": "You nearly enabled attackers to control your account fully. They could lock you out permanently."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 26,
+  "fields": {
+    "scenario": 6,
+    "order": 1,
+    "step_type": "email",
+    "title": "Payment Confirmation Required",
+    "body": "<p>Your account was accessed from an unfamiliar location.</p>\r\n<p><strong>We've temporarily locked your account for your protection.</strong></p>\r\n<p>Click below to verify your activity and restore access.</p>\r\n<p><a class=\"btn btn-outline-info btn-sm\" href=\"{% url 'training:track_link' run.run_uuid step.id 'security-verify-access' %}\">Verify account activity</a></p>\r\n<p>Tip: If a message feels urgent, confirm through your official security portal or helpdesk channels.</p>",
+    "link_slug": "security-verify-access",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Login Spoof",
+    "risk_message": "You interacted with a fake login page mimicking your organization's system. Entering your credentials would give attackers direct access."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 27,
+  "fields": {
+    "scenario": 6,
+    "order": 2,
+    "step_type": "fake_login",
+    "title": "Security Verification Portal",
+    "body": "<p>The portal looks identical to your company's login page.</p>\r\n\r\n<p>It asks for your username, password, and MFA code.</p>\r\n\r\n<div style=\"display:inline-block; background:#151a20; border:1px solid #22d3ee; border-radius:6px; padding:8px 14px; margin:8px 0;\">\r\n  <a class=\"text-info fw-semibold\"\r\n     href=\"/run/{{ run.run_uuid }}/step/{{ step.id }}/link-preview/security-verify-access-form/\"\r\n     style=\"text-decoration:none;\">\r\n    security-verify-access.com\r\n  </a>\r\n</div>\r\n\r\n<p>Would you continue and enter your details?</p>",
+    "link_slug": "security-verify-access-form",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "OTP Theft",
+    "risk_message": "A phishing form requested a one-time code. Attackers could hijack your MFA session."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 28,
+  "fields": {
+    "scenario": 6,
+    "order": 3,
+    "step_type": "notice",
+    "title": "Service Update",
+    "body": "<p>After submitting, a message appears:</p>\r\n<blockquote><em>\"Your verification is under review. You will be notified shortly.\"<em></blockquote>\r\n<p>The phishing site now has your credentials.</p>",
+    "link_slug": "account-service-update",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Security Update",
+    "risk_message": "The step faked a security update. Proceeding could have installed spyware."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 29,
+  "fields": {
+    "scenario": 6,
+    "order": 4,
+    "step_type": "notice",
+    "title": "Session Timeout",
+    "body": "<p>Cybercriminals often imitate IT security departments to build trust.</p>\r\n<p>Always verify such alerts by contacting your internal IT team directly.</p>\r\n<p>Legitimate security emails never ask for your password or MFA codes.</p>",
+    "link_slug": "account-session-timeout",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Policy Confirmation",
+    "risk_message": "Fake policy acceptance prompt detected. Accepting would redirect your data to malicious servers."
+  }
+},
+{
+  "model": "training.scenariostep",
+  "pk": 30,
+  "fields": {
+    "scenario": 6,
+    "order": 5,
+    "step_type": "summary",
+    "title": "Scenario Summary",
+    "body": "<p>You just experienced a simulated \"security verification\" phishing attempt.</p>\r\n<p><strong>Remember:</strong> verify suspicious alerts before responding.</p>\r\n<p>Your awareness is your strongest defense against phishing threats!</p>",
+    "link_slug": "account-security-summary",
+    "form_schema": null,
+    "timer_seconds": null,
+    "risk_type": "Full Breach",
+    "risk_message": "You nearly enabled attackers to control your account fully. They could lock you out permanently."
+  }
+}
+]

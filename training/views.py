@@ -771,6 +771,24 @@ def link_preview(request, run_uuid, step_id, link_slug):
            "hint": "Tip: Most password resets are initiated from your official portal or internal helpdesk page.",
        }
 
+    elif link_slug == "security-dashboard-login":
+       context = {
+           "title": "Security Dashboard Login",
+           "subtitle": "Sign in to review the newly detected session and confirm whether it should remain active.",
+           "displayed_url": "unknown-link.example",
+           "card_title": "Session Details",
+           "items": [
+               ("Device", "Browser (Desktop)"),
+               ("Location", "Auto-detected"),
+               ("IP", "Hidden until sign-in"),
+               ("Time", "Recent"),
+        ],
+          "hint": "Tip: Most security portals can be accessed from your internal dashboard or saved bookmark.",
+          "show_login": True,
+          "display_url": "unknown-link.example",
+      }
+       
+
     else:
         context = {
             "title": "External Link Preview",

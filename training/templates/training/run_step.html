@@ -11,14 +11,41 @@
   <div class="card p-4 bg-dark border rounded-3 mx-auto" style="max-width: 1000px;line-height:1.0;color:white;">
     <div> {{ rendered_body|safe }}</div>
 
-    <!-- ✅ New buttons (Back takes you directly to the final page) -->
-    <form method="post" action="{% url 'training:run_action' run_uuid=run.run_uuid %}">
+    {% if step.form_schema %}
+      <div class="mx-auto mt-3 mb-5" style="max-width:260px;">
+        {% for field in step.form_schema.fields %}
+          <label class="form-label text-light small">{{ field.label }}:</label>
+          <input
+              type="{{ field.type }}"
+              name="fake_{{ field.name }}_{{ step.id }}"
+              class="form-control form-control-sm bg-light text-dark border-secondary mb-2"
+              autocomplete="{% if field.type == 'password' %}new-password{% else %}off{% endif %}"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              readonly
+              onfocus="this.removeAttribute('readonly');">
+        {% endfor %}
+
+        <button
+            type="button"
+            id="reauth-btn"
+            class="btn btn-light btn-sm mt-1"
+            data-loading="{{ step.form_schema.loading_label|default:'Processing...' }}"
+            data-success="{{ step.form_schema.success_label|default:'✓ Done' }}"
+            onclick="fakeReauthenticate(this)">
+            {{ step.form_schema.submit_label|default:"Submit" }}
+        </button>
+      </div>
+    {% endif %}
+
+    <form method="post"
+          action="{% url 'training:run_action' run_uuid=run.run_uuid %}"
+          autocomplete="off">
       {% csrf_token %}
       <input type="hidden" name="step_id" value="{{ step.id }}">
 
       <div class="mt-4 d-flex justify-content-between">
-
-        <!-- Back button -->
         <button id="back-btn" type="submit" name="action" value="back"
          class="btn btn-outline-light"
          style="border-color:#a855f7; color:#a855f7; transition:all 0.3s ease;"
@@ -27,7 +54,6 @@
          Back
        </button>
 
-        <!-- Next button -->
         {% if next_step %}
         <button id="next-btn" type="submit" name="action" value="next"
          class="btn"
@@ -38,12 +64,9 @@
          onmouseout="this.style.backgroundColor='#d8b4fe'; this.style.transform='scale(1)';">
          Next
        </button>
-
-	
         {% else %}
         <a href="{% url 'training:run_summary' run_uuid %}" class="btn btn-success">Finish</a>
         {% endif %}
-
       </div>
     </form>
   </div>
@@ -53,6 +76,23 @@
     <span>Score: {{ run.score }}</span>
   </div>
 </div>
+
+<script>
+function fakeReauthenticate(button) {
+    button.disabled = true;
+
+    const loadingText = button.dataset.loading || "Processing...";
+    const successText = button.dataset.success || "✓ Done";
+
+    button.innerText = loadingText;
+
+    setTimeout(() => {
+        button.classList.remove("btn-light");
+        button.classList.add("btn-success");
+        button.innerText = successText;
+    }, 1200);
+}
+</script>
 
 {% if step.timer_seconds %}
 <script>
@@ -67,18 +107,20 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(tick, 1000);
     } else {
       el.textContent = " Time’s up!";
-      // Automatically submit the "timeout" action
       const form = document.createElement("form");
       form.method = "POST";
       form.action = "{% url 'training:run_action' run_uuid %}";
+
       const csrf = document.createElement("input");
       csrf.type = "hidden";
       csrf.name = "csrfmiddlewaretoken";
       csrf.value = "{{ csrf_token }}";
+
       const act = document.createElement("input");
       act.type = "hidden";
       act.name = "action";
       act.value = "timeout";
+
       form.appendChild(csrf);
       form.appendChild(act);
       document.body.appendChild(form);
@@ -87,8 +129,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   tick();
+});
+</script>
+{% endif %}
 
-
+<script>
 function sendLog(action, step, score) {
     fetch("/log_action/", {
         method: "POST",
@@ -104,7 +149,6 @@ function sendLog(action, step, score) {
             score: score
         })
     }).then(response => {
-        // اختياري: تتبع النتيجة
         console.log("Logged:", action, step, score);
     });
 }
@@ -125,9 +169,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
-
-
-});
 </script>
-{% endif %}
+
 {% endblock %}
