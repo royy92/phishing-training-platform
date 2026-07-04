@@ -1,21 +1,28 @@
 [![CI](https://github.com/royy92/phishing-training-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/royy92/phishing-training-platform/actions/workflows/ci.yml)
 
+# Phishing Training Platform (Django)
 
-phishing training platform (Django)
+Phishing scenario training app featuring multiple scenarios, login/registration support, and an interactive reporting dashboard.
 
+## Documentation
 
-Phishing scenario training app featuring multiple scenarios, login/registration support, and interactive reporting dashboard.
+📖 View the project documentation:
 
-# Requermint 
+https://royy92.github.io/phishing-training-platform/
+
+## Requirements
+
 - Python 3.11+
 - Django 4.x
 - Tailwind CSS
 
-# Run
+## Run
+
 ```bash
-python -m venv venv && source venv/bin/activate
+python -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
-
+```
