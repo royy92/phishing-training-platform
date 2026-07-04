@@ -35,21 +35,15 @@ jobs:
       - name: Run tests
         run: python manage.py test
 
+  vale-lint:
+    name: Lint prose with Vale
+    runs-on: ubuntu-latest
 
-    vale-lint:
-      name: lint prose with vale
-      runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-      steps: 
-        - uses: actions/checkout@v4
-
-        - name: Ran VAle
-          uses: vale-cli/vali-action@v2
-          with:
-            version: 3.15.1
-            file: docs/
-
-
-
-
-    
+      - name: Run Vale
+        uses: vale-cli/vale-action@v2
+        with:
+          version: 3.15.1
+          files: docs/
