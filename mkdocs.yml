@@ -1,0 +1,10 @@
+site_name: Phishing Awareness Training Platform 
+
+theme: 
+   name: material
+
+nav:
+  - Home: index.md
+  - Tutorial: tutorial.md
+  - How-to: how-to.md
+  - reference: reference.md
