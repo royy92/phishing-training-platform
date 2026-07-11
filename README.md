@@ -31,19 +31,18 @@ python manage.py runserver
 
 Download these release assets:
 
-- `phishing-training-platform-v0.1.0.tar.gz`
-- `phishing-training-platform-v0.1.0.tar.gz.sig`
-- `phishing-training-platform-v0.1.0.tar.gz.pem`
+- `phishing-training-platform-v0.1.1.tar.gz`
+- `phishing-training-platform-v0.1.1.tar.gz.sigstore.json`
+
 
 Then run:
 
 ```bash
 cosign verify-blob \
-  --certificate phishing-training-platform-v0.1.0.tar.gz.pem \
+  --bundle phishing-training-platform-v0.1.1.tar.gz.sigstore.json \
   --certificate-identity \
-    "https://github.com/royy92/phishing-training-platform/.github/workflows/release.yml@refs/tags/v0.1.0" \
+    "https://github.com/royy92/phishing-training-platform/.github/workflows/release.yml@refs/tags/v0.1.1" \
   --certificate-oidc-issuer \
     "https://token.actions.githubusercontent.com" \
-  --signature phishing-training-platform-v0.1.0.tar.gz.sig \
-  phishing-training-platform-v0.1.0.tar.gz
+  phishing-training-platform-v0.1.1.tar.gz
 ```

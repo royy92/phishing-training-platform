@@ -37,10 +37,8 @@ jobs:
         run: |
           cosign sign-blob \
             --yes \
-            --output-signature \
-              "dist/phishing-training-platform-${TAG_NAME}.tar.gz.sig" \
-            --output-certificate \
-              "dist/phishing-training-platform-${TAG_NAME}.tar.gz.pem" \
+            --bundle \
+              "dist/phishing-training-platform-${TAG_NAME}.tar.gz.sigstore.json" \
             "dist/phishing-training-platform-${TAG_NAME}.tar.gz"
 
       - name: Create GitHub release
@@ -50,8 +48,7 @@ jobs:
         run: |
           gh release create "$TAG_NAME" \
             "dist/phishing-training-platform-${TAG_NAME}.tar.gz" \
-            "dist/phishing-training-platform-${TAG_NAME}.tar.gz.sig" \
-            "dist/phishing-training-platform-${TAG_NAME}.tar.gz.pem" \
+            "dist/phishing-training-platform-${TAG_NAME}.tar.gz.sigstore.json" \
             --repo "$GITHUB_REPOSITORY" \
             --title "Release $TAG_NAME" \
             --generate-notes
