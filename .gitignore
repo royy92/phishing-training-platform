@@ -27,3 +27,4 @@ static/
 # Backups
 *.bak
 *.tar.gz
+backup.json

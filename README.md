@@ -26,3 +26,24 @@ python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
 ```
+
+## Verify the release signature
+
+Download these release assets:
+
+- `phishing-training-platform-v0.1.0.tar.gz`
+- `phishing-training-platform-v0.1.0.tar.gz.sig`
+- `phishing-training-platform-v0.1.0.tar.gz.pem`
+
+Then run:
+
+```bash
+cosign verify-blob \
+  --certificate phishing-training-platform-v0.1.0.tar.gz.pem \
+  --certificate-identity \
+    "https://github.com/royy92/phishing-training-platform/.github/workflows/release.yml@refs/tags/v0.1.0" \
+  --certificate-oidc-issuer \
+    "https://token.actions.githubusercontent.com" \
+  --signature phishing-training-platform-v0.1.0.tar.gz.sig \
+  phishing-training-platform-v0.1.0.tar.gz
+```
