@@ -1,5 +1,6 @@
 from training.models import Category, Scenario, ScenarioStep
 
+
 def seed():
     # --- Create Categories ---
     anyone = Category.objects.get_or_create(name="Anyone")[0]

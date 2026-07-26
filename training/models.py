@@ -1,15 +1,15 @@
 import re
 import uuid
 
-from django.urls import reverse
-from django.contrib.auth.models import User
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
 from django.db import models
-from django.utils.text import slugify
 from django.template import engines
-from django.utils.html import mark_safe
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import mark_safe
+from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 
 
 # =======================
@@ -263,7 +263,7 @@ def render_step_body(step, run, request) -> str:
 
         tpl = engines["django"].from_string(html)
         html = tpl.render(ctx, request=request)
-    except Exception as e:
+    except Exception as e:   # noqa: BLE001
         print(f"[render_step_body] Template render failed for step {step.id}: {e}")
 
     # 2) fallback: استبدال track_link tag برابط فعلي

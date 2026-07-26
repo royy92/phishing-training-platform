@@ -1,5 +1,6 @@
 from training.models import ScenarioStep
 
+
 def update_step_titles():
     updates = {
         "email": [
@@ -48,7 +49,7 @@ def update_step_titles():
         matched = None
 
         # نحاول نطابق أقرب مفتاح في القاموس حتى لو الاسم فيه اختلاف بسيط
-        for key in updates.keys():
+        for key in updates:
             if key in step_type:
                 matched = key
                 break

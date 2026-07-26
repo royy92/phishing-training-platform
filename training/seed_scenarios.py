@@ -1,11 +1,12 @@
 from training.models import Category, Scenario, ScenarioStep
 
+
 def seed():
     # 1️⃣ إنشاء التصنيفات
     cat_anyone, _ = Category.objects.get_or_create(name="Anyone", slug="anyone")
     cat_it, _ = Category.objects.get_or_create(name="IT / Professionals", slug="it-professionals")
     cat_students, _ = Category.objects.get_or_create(name="Students", slug="students")
-    cat_cloud, _ = Category.objects.get_or_create(name="Cloud Access Breach Simulation", slug="cloud-access")
+    _cat_cloud, _ = Category.objects.get_or_create(name="Cloud Access Breach Simulation", slug="cloud-access")
 
     # 2️⃣ سيناريو 1 - Scholarship Delay Verification
     s1 = Scenario.objects.create(title="Scholarship Delay Verification", category=cat_anyone)

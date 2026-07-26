@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Scenario, UserResponse, Category
-from .models import ScenarioStep
+
+from .models import Category, Scenario, ScenarioStep, UserResponse
+
 
 @admin.register(Scenario)
 class ScenarioAdmin(admin.ModelAdmin):

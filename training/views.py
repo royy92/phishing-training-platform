@@ -1,25 +1,26 @@
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, JsonResponse
-from django.utils import timezone
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
-from django.db.models import Count, Avg
-from django.views.decorators.http import require_POST
-from .models import UserScenarioRun, ScenarioStep, UserAction
-import random
-import string
 import csv
 import json
+import random
+import string
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Avg, Count
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 # Models / helpers
 from .models import (
     Category,
     Scenario,
     ScenarioLog,
+    ScenarioStep,
+    UserAction,
+    UserScenarioRun,
     render_step_body,
 )
 
