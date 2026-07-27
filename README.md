@@ -10,6 +10,12 @@ Phishing scenario training app featuring multiple scenarios, login/registration 
 
 https://royy92.github.io/phishing-training-platform/
 
+## Platform
+
+![Available Categories](images/categories.png)
+
+![Training Scenarios](images/scenarios.png)
+
 ## Requirements
 
 - Python 3.11+
