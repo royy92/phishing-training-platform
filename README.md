@@ -19,7 +19,7 @@ https://royy92.github.io/phishing-training-platform/
 ## Requirements
 
 - Python 3.11+
-- Django 4.x
+- Django 6.x
 - Tailwind CSS
 
 ## Run
