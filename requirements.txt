@@ -1,4 +1,4 @@
-Django>=6.1.1
+Django>=6.1.2
 requests
 crispy-bootstrap5
 whitenoise
